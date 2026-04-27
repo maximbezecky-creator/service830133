@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Особистий кабінет | За Ноги</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E55A2B;
+            --secondary: #2D3436;
+            --accent: #00B894;
+            --bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text: #2D3436;
+            --text-light: #636E72;
+            --border: #DFE6E9;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .logo-loader {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 2rem;
+            letter-spacing: -1px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        .progress-container {
+            width: 280px;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: white;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .loading-text {
+            color: white;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Main Container */
+        .main-container {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .main-container.visible {
+            opacity: 1;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -1px;
+        }
+
+        .brand span {
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        /* Login Section */
+        .login-section {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            background: linear-gradient(180deg, var(--bg) 0%, #fff 100%);
+        }
+
+        .login-welcome {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .login-welcome h1 {
+            font-size: 2.2rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .login-welcome p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 1.5rem 4rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255,107,53,0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .dashboard.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+            padding: 0.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-tab {
+            flex: 1;
+            min-width: 100px;
+            padding: 1rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255,107,53,0.3);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Balance Display */
+        .balance-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, var(--secondary) 0%, #1a1a2e 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .balance-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .balance-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .balance-sub {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* Tariff Info */
+        .tariff-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tariff-name::before {
+            content: '★';
+            color: gold;
+        }
+
+        .tariff-status {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .next-payment {
+            background: linear-gradient(135deg, #FFF5F2 0%, #FFE8E0 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .next-payment-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .next-payment-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .service-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .service-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .service-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .service-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .service-title {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .service-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .service-highlight {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Payment Section */
+        .payment-methods {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .payment-method {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .payment-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .payment-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .payment-info p {
+            color: var(--text-light);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .payment-address {
+            background: linear-gradient(135deg, #E8F6F3 0%, #D5F5E3 100%);
+            border-left: 4px solid var(--accent);
+            padding: 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin-top: 1rem;
+        }
+
+        .payment-address strong {
+            color: var(--accent);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Support Section */
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .support-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .support-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .support-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .support-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .support-label {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .support-note {
+            background: #FFF3CD;
+            border-left: 4px solid #FFC107;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+            font-size: 0.9rem;
+            color: #856404;
+            margin-top: 1rem;
+        }
+
+        .support-note strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Location Card */
+        .location-card {
+            background: linear-gradient(135deg, var(--secondary) 0%, #1a1a2e 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .location-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .location-icon {
+            font-size: 1.5rem;
+        }
+
+        .location-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .location-address {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            padding-left: 2.25rem;
+        }
+
+        .location-warning {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .location-warning::before {
+            content: '⚠️';
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .brand {
+                font-size: 1.5rem;
+            }
+
+            .login-welcome h1 {
+                font-size: 1.8rem;
+            }
+
+            .login-btn {
+                padding: 1.25rem 3rem;
+                font-size: 1.2rem;
+            }
+
+            .nav-tabs {
+                padding: 0.25rem;
+            }
+
+            .nav-tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .balance-value {
+                font-size: 1.8rem;
+            }
+
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="logo-loader">ЗА НОГИ</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="loading-text">Завантаження особистого кабінету...</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container" id="mainContainer">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="brand">ЗА <span>НОГИ</span></div>
+            </div>
+        </header>
+
+        <!-- Login Section -->
+        <section class="login-section" id="loginSection">
+            <div class="login-welcome">
+                <h1>Вітаємо вас!</h1>
+                <p>Особистий кабінет абонента</p>
+            </div>
+            <button class="login-btn" id="loginBtn">Увійти</button>
+        </section>
+
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <!-- Navigation -->
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="services">Послуги</button>
+                <button class="nav-tab" data-tab="payment">Оплата</button>
+                <button class="nav-tab" data-tab="support">Підтримка</button>
+            </nav>
+
+            <!-- Services Tab -->
+            <div class="tab-content active" id="services">
+                <!-- Balance Cards -->
+                <div class="balance-section">
+                    <div class="balance-card">
+                        <div class="balance-label">Ваш тариф</div>
+                        <div class="balance-value">"Пенсійний"</div>
+                        <div class="balance-sub">Активний</div>
+                    </div>
+                    <div class="balance-card">
+                        <div class="balance-label">Залишок на рахунку</div>
+                        <div class="balance-value" id="balanceValue">0 грн</div>
+                        <div class="balance-sub" id="dailyCharge">Щоденне списання: 0 грн</div>
+                    </div>
+                </div>
+
+                <!-- Payment Status -->
+                <div class="next-payment">
+                    <div class="next-payment-label">Статус оплати</div>
+                    <div class="next-payment-value">✓ Оплата пройшла успішно</div>
+                </div>
+
+                <div class="next-payment" style="background: linear-gradient(135deg, #E8F6F3 0%, #D5F5E3 100%); border-left-color: var(--accent);">
+                    <div class="next-payment-label">Наступна оплата через</div>
+                    <div class="next-payment-value" id="daysLeft" style="color: var(--accent);">0 днів</div>
+                </div>
+
+                <!-- Tariff Details -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📋</div>
+                        <div class="card-title">Умови вашого тарифу</div>
+                    </div>
+
+                    <div class="services-grid">
+                        <div class="service-item">
+                            <div class="service-icon">🌐</div>
+                            <div class="service-title">Домашній інтернет</div>
+                            <div class="service-desc"><span class="service-highlight">Безлімітний</span> доступ через телефонний кабель</div>
+                        </div>
+
+                        <div class="service-item">
+                            <div class="service-icon">📺</div>
+                            <div class="service-title">Телебачення</div>
+                            <div class="service-desc"><span class="service-highlight">309 українських каналів</span> у цифровій якості</div>
+                        </div>
+
+                        <div class="service-item">
+                            <div class="service-icon">📱</div>
+                            <div class="service-title">Захищений номер</div>
+                            <div class="service-desc"><span class="service-highlight">068 450 6605</span><br>Тільки для прийому дзвінків та SMS</div>
+                        </div>
+
+                        <div class="service-item">
+                            <div class="service-icon">🔄</div>
+                            <div class="service-title">Безліміт в мережі</div>
+                            <div class="service-desc"><span class="service-highlight">"За Ноги"</span> — необмежені дзвінки та повідомлення</div>
+                        </div>
+
+                        <div class="service-item">
+                            <div class="service-icon">📞</div>
+                            <div class="service-title">Дзвінки на інші мережі</div>
+                            <div class="service-desc"><span class="service-highlight">150 хвилин</span> на Київстар та Vodafone<br><span class="service-highlight">300 хвилин</span> через Viber</div>
+                        </div>
+
+                        <div class="service-item">
+                            <div class="service-icon">📶</div>
+                            <div class="service-title">Мобільний інтернет</div>
+                            <div class="service-desc"><span class="service-highlight">7 ГБ</span> швидкісного мобільного інтернету</div>
+                        </div>
+
+                        <div class="service-item">
+                            <div class="service-icon">✉️</div>
+                            <div class="service-title">SMS-повідомлення</div>
+                            <div class="service-desc"><span class="service-highlight">50 SMS</span> на всі номери України</div>
+                        </div>
+
+                        <div class="service-item">
+                            <div class="service-icon">🏥</div>
+                            <div class="service-title">Медична підтримка</div>
+                            <div class="service-desc"><span class="service-highlight">30 хвилин/місяць</span> консультацій з віртуальними лікарями та психологами</div>
+                        </div>
+
+                        <div class="service-item">
+                            <div class="service-icon">📲</div>
+                            <div class="service-title">Номер для вихідних дзвінків</div>
+                            <div class="service-desc"><span class="service-highlight">089 900 3695</span><br>Тільки для дзвінків, не приймає вхідні</div>
+                        </div>
+
+                        <div class="service-item">
+                            <div class="service-icon">🛰️</div>
+                            <div class="service-title">Супутниковий номер</div>
+                            <div class="service-desc"><span class="service-highlight">+881 8 900 35950</span><br>Дзвінки за кордон за низькими тарифами</div>
+                        </div>
+
+                        <div class="service-item">
+                            <div class="service-icon">🔒</div>
+                            <div class="service-title">Додатковий захищений номер</div>
+                            <div class="service-desc"><span class="service-highlight">092 450 6605</span><br>Для користувачів оператора "За Ноги"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Tab -->
+            <div class="tab-content" id="payment">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💳</div>
+                        <div class="card-title">Способи оплати</div>
+                    </div>
+
+                    <div class="payment-methods">
+                        <div class="payment-method">
+                            <div class="payment-icon">🏧</div>
+                            <div class="payment-info">
+                                <h3>Термінали iBox</h3>
+                                <p>Швидка та зручна оплата через мережу терміналів iBox по всій Україні. Приймаються готівка та банківські картки. Комісія відсутня.</p>
+                            </div>
+                        </div>
+
+                        <div class="payment-method">
+                            <div class="payment-icon">🏢</div>
+                            <div class="payment-info">
+                                <h3>Точка обслуговування</h3>
+                                <p>Оплата готівкою або перерахунком безпосередньо в офісі оператора. Можливість отримати консультацію та вирішити додаткові питання.</p>
+                                <div class="payment-address">
+                                    <strong>📍 Адреса точки обслуговування:</strong>
+                                    м. Запоріжжя, Заводський район,<br>
+                                    вулиця Передатна, 19
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">Інформація про оплату</div>
+                    </div>
+
+                    <div style="line-height: 1.8; color: var(--text);">
+                        <p style="margin-bottom: 1rem;"><strong>Вартість тарифу:</strong> 700 грн/місяць</p>
+                        <p style="margin-bottom: 1rem;"><strong>Періодичність:</strong> Щомісячна оплата (1 числа кожного місяця)</p>
+                        <p style="margin-bottom: 1rem;"><strong>Поточний статус:</strong> <span style="color: var(--accent); font-weight: 600;">✓ Оплачено</span></p>
+                        <p><strong>Щоденне списання:</strong> <span id="paymentDailyCharge">0 грн</span> (пропорційно від вартості тарифу)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Tab -->
+            <div class="tab-content" id="support">
+                <div class="support-grid">
+                    <div class="support-card">
+                        <div class="support-icon">📞</div>
+                        <div class="support-label">Цілодобова підтримка в мережі</div>
+                        <div class="support-number">999</div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Безкоштовно для абонентів "За Ноги"</p>
+                    </div>
+
+                    <div class="support-card">
+                        <div class="support-icon">🌍</div>
+                        <div class="support-label">Міжнародна підтримка</div>
+                        <div class="support-number">+881 8 000 50505</div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Дзвінки з-за кордону</p>
+                    </div>
+                </div>
+
+                <div class="location-card">
+                    <div class="location-header">
+                        <div class="location-icon">🏢</div>
+                        <div class="location-title">Центр обслуговування абонентів</div>
+                    </div>
+                    <div class="location-address">
+                        м. Запоріжжя<br>
+                        Заводський район<br>
+                        вулиця Передатна, 19
+                    </div>
+                    <div class="location-warning">
+                        <strong>Важливо:</strong> Відвідування офісу можливе <strong>тільки за попередньо узгодженою зустріччю</strong>. Будь ласка, зателефонуйте на лінію підтримки для запису.
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <div class="card-icon">⏰</div>
+                        <div class="card-title">Графік роботи підтримки</div>
+                    </div>
+                    <div style="display: grid; gap: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--bg); border-radius: 8px;">
+                            <span>Телефонна підтримка (999)</span>
+                            <strong style="color: var(--accent);">Цілодобово, без вихідних</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--bg); border-radius: 8px;">
+                            <span>Особистий візит (за записом)</span>
+                            <strong>Пн-Пт: 9:00-18:00</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+        // Configuration
+        const TARIFF_FIXED = 700; // Фіксована вартість тарифу - завжди 700 грн
+        const USER_BALANCE = 1400; // Баланс користувача - може бути будь-яким значенням
+
+        // DOM Elements
+        const loadingScreen = document.getElementById('loadingScreen');
+        const progressBar = document.getElementById('progressBar');
+        const mainContainer = document.getElementById('mainContainer');
+        const loginSection = document.getElementById('loginSection');
+        const loginBtn = document.getElementById('loginBtn');
+        const dashboard = document.getElementById('dashboard');
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Calculate balance logic
+        function calculateBalance() {
+            const now = new Date();
+            const currentDay = now.getDate();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+
+            // Get total days in current month
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            // Щоденне списання завжди розраховується від ФІКСОВАНОЇ вартості тарифу (700 грн)
+            // Незалежно від того, скільки грошей на рахунку користувача
+            const dailyCharge = TARIFF_FIXED / daysInMonth;
+
+            // Calculate remaining days until 1st of next month
+            const daysLeft = daysInMonth - currentDay + 1;
+
+            // Скільки днів пройшло з початку місяця (вже списано)
+            const daysPassed = currentDay - 1;
+
+            // Скільки вже списано з фіксованого тарифу
+            const alreadyCharged = daysPassed * dailyCharge;
+
+            // Залишок по тарифу (не списана частина 700 грн)
+            const tariffRemaining = Math.max(0, TARIFF_FIXED - alreadyCharged);
+
+            // Якщо користувач поклав більше ніж 700 грн - решта залишається як "переплата"
+            // Наприклад: 1400 грн = 700 (тариф) + 700 (переплата на наступний місяць)
+            const overpayment = Math.max(0, USER_BALANCE - TARIFF_FIXED);
+
+            // Загальний залишок на рахунку = не списана частина тарифу + переплата
+            const totalBalance = tariffRemaining + overpayment;
+
+            return {
+                balance: totalBalance.toFixed(2),
+                dailyCharge: dailyCharge.toFixed(2),
+                daysLeft: daysLeft,
+                tariffRemaining: tariffRemaining.toFixed(2),
+                overpayment: overpayment.toFixed(2)
+            };
+        }
+
+        // Update balance display
+        function updateBalanceDisplay() {
+            const calc = calculateBalance();
+            document.getElementById('balanceValue').textContent = calc.balance + ' грн';
+            document.getElementById('dailyCharge').textContent = 'Щоденне списання: ' + calc.dailyCharge + ' грн';
+            document.getElementById('daysLeft').textContent = calc.daysLeft + ' днів';
+            document.getElementById('paymentDailyCharge').textContent = calc.dailyCharge + ' грн';
+
+            // Додаткова інформація (опціонально - можна додати в HTML)
+            console.log('Залишок по тарифу:', calc.tariffRemaining + ' грн');
+            console.log('Переплата:', calc.overpayment + ' грн');
+        }
+
+        // Loading Animation
+        function startLoading() {
+            const minTime = 3000; // 3 seconds
+            const maxTime = 6000; // 6 seconds
+            const duration = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+            const startTime = Date.now();
+
+            function updateProgress() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min((elapsed / duration) * 100, 100);
+                progressBar.style.width = progress + '%';
+
+                if (progress < 100) {
+                    requestAnimationFrame(updateProgress);
+                } else {
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        mainContainer.classList.add('visible');
+                    }, 300);
+                }
+            }
+
+            requestAnimationFrame(updateProgress);
+        }
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            navTabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.tab === tabId) {
+                    tab.classList.add('active');
+                }
+            });
+
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === tabId) {
+                    content.classList.add('active');
+                }
+            });
+        }
+
+        // Event Listeners
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                switchTab(tab.dataset.tab);
+            });
+        });
+
+        loginBtn.addEventListener('click', () => {
+            loginSection.style.display = 'none';
+            dashboard.classList.add('active');
+            updateBalanceDisplay();
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            startLoading();
+        });
+    </script>
