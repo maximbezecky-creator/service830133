@@ -3,50 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Особистий кабінет | За Ноги</title>
+    <title>Особистий кабінет | iNum Europe</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --primary: #FF6B35;
-            --primary-dark: #E55A2B;
-            --secondary: #2D3436;
-            --accent: #00B894;
-            --bg: #F8F9FA;
-            --card-bg: #FFFFFF;
-            --text: #2D3436;
-            --text-light: #636E72;
-            --border: #DFE6E9;
-            --shadow: 0 4px 20px rgba(0,0,0,0.08);
-            --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+            --primary: #1a56db;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e40af;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --text-lighter: #94a3b8;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 10px 30px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.08), 0 20px 50px rgba(0,0,0,0.06);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
+            font-size: 1.1rem;
         }
 
-        /* Loading Screen */
+        /* ===== LOADING SCREEN ===== */
         .loading-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            inset: 0;
+            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
         }
 
         .loading-screen.hidden {
@@ -55,111 +59,362 @@
             pointer-events: none;
         }
 
-        .logo-loader {
-            font-size: 2.5rem;
-            font-weight: 800;
+        .loader-brand {
+            font-size: 3rem;
+            font-weight: 900;
             color: white;
-            margin-bottom: 2rem;
-            letter-spacing: -1px;
-            animation: pulse 2s ease-in-out infinite;
+            letter-spacing: -2px;
+            margin-bottom: 0.25rem;
+            animation: loaderPulse 2s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
+        .loader-brand span {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .progress-container {
-            width: 280px;
-            height: 6px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 3px;
+        .loader-sub {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+        }
+
+        @keyframes loaderPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .loader-ring {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loader-progress-wrap {
+            width: 240px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
             overflow: hidden;
-            position: relative;
         }
 
-        .progress-bar {
+        .loader-progress-bar {
             height: 100%;
-            background: white;
-            border-radius: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--primary-light));
+            border-radius: 2px;
             width: 0%;
-            transition: width 0.1s linear;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            transition: width 0.15s linear;
         }
 
-        .loading-text {
-            color: white;
+        .loader-text {
+            color: rgba(255,255,255,0.4);
             margin-top: 1rem;
-            font-size: 0.9rem;
-            opacity: 0.9;
+            font-size: 0.8rem;
         }
 
-        /* Main Container */
+        /* ===== PSYCHOLOGIST SCREENS ===== */
+        .psychologist-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(160deg, #f0f4f8 0%, #e8eef5 100%);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .psychologist-screen.active { display: flex; }
+
+        .psych-card {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .psych-image {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 2rem;
+            border: 8px solid var(--accent);
+        }
+
+        .psych-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        .psych-text {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .psych-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 1.5rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(26,86,219,0.35);
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .psych-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(26,86,219,0.45);
+        }
+
+        .psych-btn.secondary {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        /* ===== MEDITATION SCREEN ===== */
+        .meditation-screen {
+            position: fixed;
+            inset: 0;
+            background: #000000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            padding: 3rem;
+        }
+
+        .meditation-screen.active { display: flex; }
+
+        .meditation-orb {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 8px solid var(--accent);
+            margin-bottom: 3rem;
+            box-shadow: 0 0 60px rgba(6,182,212,0.4);
+        }
+
+        .meditation-orb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .meditation-phrase {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.4;
+            opacity: 0;
+            transition: opacity 3s ease-in;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .meditation-phrase.visible {
+            opacity: 1;
+            transition: opacity 3s ease-in;
+        }
+
+        .meditation-phrase.fading {
+            opacity: 0;
+            transition: opacity 3s ease-out;
+        }
+
+        .meditation-end {
+            text-align: center;
+            display: none;
+        }
+
+        .meditation-end.active { display: block; }
+
+        .heart-icon {
+            font-size: 6rem;
+            margin-bottom: 2rem;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .meditation-end h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .meditation-end p {
+            font-size: 1.8rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* ===== MAIN CONTAINER ===== */
         .main-container {
             opacity: 0;
             transition: opacity 0.5s ease;
         }
 
-        .main-container.visible {
-            opacity: 1;
-        }
+        .main-container.visible { opacity: 1; }
 
-        /* Header */
+        /* ===== HEADER ===== */
         .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            padding: 1.5rem 2rem;
-            box-shadow: var(--shadow);
+            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 100%);
+            padding: 0;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
 
-        .header-content {
-            max-width: 900px;
+        .header-inner {
+            max-width: 1100px;
             margin: 0 auto;
+            padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .brand {
-            font-size: 1.8rem;
-            font-weight: 800;
+            font-size: 2rem;
+            font-weight: 900;
             color: white;
             letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
-        .brand span {
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: white;
+            font-weight: 800;
+        }
+
+        .brand-text span {
             font-weight: 400;
-            opacity: 0.9;
+            opacity: 0.7;
+            font-size: 0.85em;
         }
 
-        /* Login Section */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .user-name { font-size: 1.1rem; font-weight: 600; }
+        .user-role { font-size: 0.9rem; opacity: 0.6; }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-xs);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover { background: rgba(255,255,255,0.2); }
+
+        /* ===== LOGIN SECTION ===== */
         .login-section {
             min-height: calc(100vh - 80px);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
-            background: linear-gradient(180deg, var(--bg) 0%, #fff 100%);
+            padding: 3rem;
+            background: linear-gradient(180deg, var(--bg) 0%, #e8eef5 100%);
         }
 
-        .login-welcome {
+        .login-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 4rem;
+            box-shadow: var(--shadow-lg);
             text-align: center;
-            margin-bottom: 3rem;
+            max-width: 500px;
+            width: 100%;
         }
 
-        .login-welcome h1 {
-            font-size: 2.2rem;
+        .login-logo {
+            font-size: 3rem;
+            font-weight: 900;
             color: var(--secondary);
             margin-bottom: 0.5rem;
-            font-weight: 700;
+            letter-spacing: -1px;
         }
 
-        .login-welcome p {
+        .login-logo span { color: var(--primary); }
+
+        .login-subtitle {
             color: var(--text-light);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
         }
 
         .login-btn {
@@ -167,397 +422,527 @@
             color: white;
             border: none;
             padding: 1.5rem 4rem;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            border-radius: 50px;
+            border-radius: 14px;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+            box-shadow: 0 8px 25px rgba(26,86,219,0.35);
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            width: 100%;
         }
 
         .login-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255,107,53,0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(26,86,219,0.45);
         }
 
-        .login-btn:active {
-            transform: translateY(-1px);
+        .login-footer {
+            margin-top: 2.5rem;
+            font-size: 0.95rem;
+            color: var(--text-lighter);
         }
 
-        /* Dashboard */
+        /* ===== DASHBOARD ===== */
         .dashboard {
             display: none;
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 1.5rem;
+            padding: 2rem;
         }
 
         .dashboard.active {
             display: block;
-            animation: fadeIn 0.5s ease;
+            animation: fadeUp 0.5s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Navigation Tabs */
+        /* ===== WELCOME BANNER ===== */
+        .welcome-banner {
+            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 60%, #1a56db 100%);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-text h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-text p { opacity: 0.7; font-size: 1.1rem; }
+        .welcome-date { text-align: right; font-size: 1rem; opacity: 0.6; }
+
+        /* ===== NAV TABS ===== */
         .nav-tabs {
             display: flex;
             gap: 0.5rem;
             margin-bottom: 2rem;
             background: var(--card-bg);
             padding: 0.5rem;
-            border-radius: 16px;
+            border-radius: 14px;
             box-shadow: var(--shadow);
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
 
+        .nav-tabs::-webkit-scrollbar { display: none; }
+
         .nav-tab {
-            flex: 1;
-            min-width: 100px;
+            flex-shrink: 0;
             padding: 1rem 1.5rem;
             border: none;
             background: transparent;
             color: var(--text-light);
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            border-radius: var(--radius-sm);
+            transition: all 0.25s ease;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .nav-tab:hover {
-            background: var(--bg);
-            color: var(--text);
-        }
+        .nav-tab:hover { background: var(--bg); color: var(--text); }
 
         .nav-tab.active {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 15px rgba(255,107,53,0.3);
+            box-shadow: 0 4px 12px rgba(26,86,219,0.3);
         }
 
-        /* Tab Content */
-        .tab-content {
-            display: none;
-        }
+        .nav-tab-icon { font-size: 1.3rem; }
+
+        /* ===== TAB CONTENT ===== */
+        .tab-content { display: none; }
 
         .tab-content.active {
             display: block;
-            animation: slideIn 0.4s ease;
+            animation: slideIn 0.35s ease;
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Cards */
+        /* ===== CARDS ===== */
         .card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 1.5rem;
+            border-radius: var(--radius);
+            padding: 2rem;
             margin-bottom: 1.5rem;
             box-shadow: var(--shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
         }
 
         .card-header {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border);
         }
 
         .card-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            border-radius: 12px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
+            flex-shrink: 0;
         }
 
-        .card-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--secondary);
-        }
+        .card-icon.green { background: linear-gradient(135deg, #059669 0%, var(--accent-green) 100%); }
+        .card-icon.amber { background: linear-gradient(135deg, #d97706 0%, var(--accent-amber) 100%); }
+        .card-icon.rose { background: linear-gradient(135deg, #e11d48 0%, var(--accent-rose) 100%); }
+        .card-icon.cyan { background: linear-gradient(135deg, #0891b2 0%, var(--accent) 100%); }
+        .card-icon.purple { background: linear-gradient(135deg, #7c3aed 0%, var(--accent-purple) 100%); }
 
-        /* Status Badge */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--accent);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
+        .card-title { font-size: 1.4rem; font-weight: 700; color: var(--secondary); }
+        .card-subtitle { font-size: 1rem; color: var(--text-lighter); margin-top: 0.25rem; }
 
-        .status-badge::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: white;
-            border-radius: 50%;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Balance Display */
-        .balance-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
+        /* ===== TARIFF HERO ===== */
+        .tariff-hero {
+            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #1a56db 100%);
+            border-radius: var(--radius);
+            padding: 2.5rem;
             margin-bottom: 1.5rem;
-        }
-
-        .balance-card {
-            background: linear-gradient(135deg, var(--secondary) 0%, #1a1a2e 100%);
             color: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            text-align: center;
         }
 
-        .balance-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .balance-value {
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 0.25rem;
-        }
-
-        .balance-sub {
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-
-        /* Tariff Info */
-        .tariff-name {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
+        .tariff-hero-top {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
         }
 
-        .tariff-name::before {
-            content: '★';
-            color: gold;
-        }
+        .tariff-name { font-size: 2.2rem; font-weight: 900; }
 
-        .tariff-status {
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-
-        .next-payment {
-            background: linear-gradient(135deg, #FFF5F2 0%, #FFE8E0 100%);
-            border-left: 4px solid var(--primary);
-            padding: 1rem 1.5rem;
-            border-radius: 0 12px 12px 0;
-            margin-bottom: 1.5rem;
-        }
-
-        .next-payment-label {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 0.25rem;
-        }
-
-        .next-payment-value {
-            font-size: 1.4rem;
+        .tariff-badge {
+            background: rgba(16,185,129,0.2);
+            color: #6ee7b7;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 1rem;
             font-weight: 700;
-            color: var(--primary-dark);
         }
 
-        /* Services Grid */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1rem;
-        }
-
-        .service-item {
-            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 1.25rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .service-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--primary);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-
-        .service-item:hover {
-            border-color: var(--primary);
-            transform: translateX(5px);
-        }
-
-        .service-item:hover::before {
-            transform: scaleY(1);
-        }
-
-        .service-icon {
-            font-size: 2rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .service-title {
-            font-weight: 700;
-            color: var(--secondary);
+        .tariff-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
         }
 
-        .service-desc {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
+        .tariff-price { font-size: 3rem; font-weight: 900; }
+        .tariff-price-period { font-size: 1.2rem; opacity: 0.6; }
+        .tariff-next-payment { font-size: 1.1rem; opacity: 0.6; }
+        .tariff-next-payment strong { color: #6ee7b7; }
 
-        .service-highlight {
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        /* Payment Section */
-        .payment-methods {
+        /* ===== TARIFF FEATURES ===== */
+        .tariff-features {
             display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 1rem;
         }
 
-        .payment-method {
+        .feature-item {
             background: var(--card-bg);
-            border: 2px solid var(--border);
-            border-radius: 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
             padding: 1.5rem;
             display: flex;
             align-items: flex-start;
             gap: 1rem;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
 
-        .payment-method:hover {
-            border-color: var(--primary);
-            box-shadow: var(--shadow-hover);
+        .feature-item:hover {
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow);
+            transform: translateX(3px);
         }
 
-        .payment-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        .feature-icon {
+            width: 54px;
+            height: 54px;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             flex-shrink: 0;
         }
 
-        .payment-info h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
+        .feature-icon.green-bg { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); }
+        .feature-icon.amber-bg { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); }
+        .feature-icon.rose-bg { background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); }
+        .feature-icon.cyan-bg { background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%); }
+        .feature-icon.purple-bg { background: linear-gradient(135deg, #faf5ff 0%, #ede9fe 100%); }
+
+        .feature-text h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
             color: var(--secondary);
+            margin-bottom: 0.3rem;
         }
 
-        .payment-info p {
-            color: var(--text-light);
-            line-height: 1.6;
+        .feature-text p { font-size: 1rem; color: var(--text-light); line-height: 1.6; }
+        .feature-value { color: var(--primary); font-weight: 700; }
+        .feature-value.green { color: var(--accent-green); }
+
+        /* ===== BALANCE HERO ===== */
+        .balance-hero {
+            background: linear-gradient(160deg, #059669 0%, var(--accent-green) 100%);
+            border-radius: var(--radius);
+            padding: 3rem;
+            margin-bottom: 2rem;
+            color: white;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .balance-hero-label { font-size: 1.2rem; opacity: 0.9; margin-bottom: 1rem; }
+        .balance-hero-value { font-size: 4rem; font-weight: 900; margin-bottom: 1rem; }
+        .balance-hero-info { font-size: 1.1rem; opacity: 0.8; }
+
+        /* ===== HISTORY TABLE ===== */
+        .history-table { width: 100%; border-collapse: collapse; }
+
+        .history-table th {
+            text-align: left;
+            padding: 1rem 1.25rem;
             font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-lighter);
+            border-bottom: 2px solid var(--border);
+            font-weight: 600;
         }
 
-        .payment-address {
-            background: linear-gradient(135deg, #E8F6F3 0%, #D5F5E3 100%);
-            border-left: 4px solid var(--accent);
+        .history-table td {
             padding: 1.25rem;
-            border-radius: 0 12px 12px 0;
+            font-size: 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .history-table tr:last-child td { border-bottom: none; }
+        .history-table tr:hover td { background: #f8fafc; }
+
+        /* ===== HEALTH SECTION ===== */
+        .health-vitals {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .vital-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .vital-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+        .vital-label { font-size: 0.95rem; color: var(--text-light); margin-bottom: 0.5rem; }
+        .vital-value { font-size: 2rem; font-weight: 800; color: var(--secondary); }
+        .vital-unit { font-size: 1rem; color: var(--text-light); font-weight: 500; }
+        .vital-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        .vital-status.good { background: #d1fae5; color: #065f46; }
+        .vital-status.warn { background: #fef3c7; color: #92400e; }
+
+        .medicine-schedule {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .medicine-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+        }
+
+        .medicine-time {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-xs);
+            font-weight: 700;
+            font-size: 1.1rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .medicine-info { flex: 1; }
+        .medicine-name { font-weight: 700; color: var(--secondary); font-size: 1.1rem; }
+        .medicine-dose { color: var(--text-light); font-size: 0.95rem; margin-top: 0.2rem; }
+
+        .medicine-check {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .medicine-check.pending {
+            background: var(--border);
+            color: var(--text-lighter);
+        }
+
+        .ai-recommendation {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
             margin-top: 1rem;
         }
 
-        .payment-address strong {
-            color: var(--accent);
-            display: block;
+        .ai-recommendation h4 {
+            color: var(--primary-dark);
+            font-size: 1.1rem;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        /* Support Section */
+        .ai-recommendation p {
+            color: var(--text);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* ===== FAMILY CIRCLE ===== */
+        .family-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .family-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .family-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .family-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .family-avatar.online::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-green);
+            border: 3px solid white;
+            border-radius: 50%;
+        }
+
+        .family-avatar.dad { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .family-avatar.mom { background: linear-gradient(135deg, #be185d, #ec4899); }
+        .family-avatar.son { background: linear-gradient(135deg, #059669, #10b981); }
+        .family-avatar.grandson { background: linear-gradient(135deg, #d97706, #f59e0b); }
+
+        .family-name { font-size: 1.15rem; font-weight: 700; color: var(--secondary); }
+        .family-relation { color: var(--text-light); font-size: 0.95rem; margin-bottom: 0.5rem; }
+        .family-status { font-size: 0.9rem; color: var(--accent-green); font-weight: 600; }
+        .family-status.offline { color: var(--text-lighter); }
+
+        .family-message {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .message-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .message-content { flex: 1; }
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        .message-sender { font-weight: 700; color: var(--secondary); }
+        .message-time { color: var(--text-lighter); font-size: 0.9rem; }
+        .message-text { color: var(--text); line-height: 1.6; }
+        .message-voice {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: #eff6ff;
+            border-radius: var(--radius-xs);
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* ===== SUPPORT ===== */
         .support-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
         }
 
         .support-card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 1.5rem;
+            border-radius: var(--radius);
+            padding: 2rem;
             box-shadow: var(--shadow);
             text-align: center;
             transition: all 0.3s ease;
         }
 
         .support-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
         }
 
         .support-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1rem;
+            margin: 0 auto 1.5rem;
             color: white;
             font-size: 2rem;
         }
@@ -567,37 +952,15 @@
             font-weight: 800;
             color: var(--primary);
             margin-bottom: 0.5rem;
-            font-family: 'Courier New', monospace;
         }
 
-        .support-label {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
+        .support-label { color: var(--text-light); font-size: 1.1rem; }
 
-        .support-note {
-            background: #FFF3CD;
-            border-left: 4px solid #FFC107;
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
-            text-align: left;
-            font-size: 0.9rem;
-            color: #856404;
-            margin-top: 1rem;
-        }
-
-        .support-note strong {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Location Card */
         .location-card {
-            background: linear-gradient(135deg, var(--secondary) 0%, #1a1a2e 100%);
+            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 100%);
             color: white;
-            border-radius: 20px;
-            padding: 1.5rem;
+            border-radius: var(--radius);
+            padding: 2rem;
             margin-top: 1.5rem;
         }
 
@@ -608,330 +971,672 @@
             margin-bottom: 1rem;
         }
 
-        .location-icon {
-            font-size: 1.5rem;
-        }
-
-        .location-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
+        .location-icon { font-size: 1.6rem; }
+        .location-title { font-size: 1.3rem; font-weight: 700; }
 
         .location-address {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            padding-left: 2.25rem;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+            padding-left: 2.5rem;
+            opacity: 0.85;
         }
 
         .location-warning {
-            background: rgba(255,255,255,0.1);
-            padding: 1rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
+            background: rgba(255,255,255,0.08);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-xs);
+            font-size: 1rem;
             display: flex;
             align-items: flex-start;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            line-height: 1.6;
         }
 
-        .location-warning::before {
-            content: '⚠️';
+        .location-warning::before { content: '⚠️'; flex-shrink: 0; }
+
+        /* ===== SCROLL BUTTONS ===== */
+        .scroll-btn {
+            position: fixed;
+            bottom: 1.5rem;
+            padding: 0.85rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(26,86,219,0.4);
+            transition: all 0.3s ease;
+            z-index: 99;
+            display: none;
+            max-width: 280px;
         }
 
-        /* Responsive */
+        .scroll-btn.visible { display: block; }
+
+        .scroll-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26,86,219,0.5);
+        }
+
+        .scroll-btn.next {
+            left: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-green) 0%, #059669 100%);
+        }
+
+        .scroll-btn.scroll { right: 1.5rem; }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .header {
-                padding: 1rem;
-            }
-
-            .brand {
-                font-size: 1.5rem;
-            }
-
-            .login-welcome h1 {
-                font-size: 1.8rem;
-            }
-
-            .login-btn {
-                padding: 1.25rem 3rem;
-                font-size: 1.2rem;
-            }
-
-            .nav-tabs {
-                padding: 0.25rem;
-            }
-
-            .nav-tab {
-                padding: 0.75rem 1rem;
-                font-size: 0.9rem;
-            }
-
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .balance-value {
-                font-size: 1.8rem;
-            }
-
-            .support-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .services-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            body { font-size: 1rem; }
+            .header-inner { padding: 1rem 1.5rem; }
+            .brand { font-size: 1.5rem; }
+            .user-name, .user-role { display: none; }
+            .login-card { padding: 2.5rem 2rem; }
+            .login-logo { font-size: 2.5rem; }
+            .welcome-banner { flex-direction: column; gap: 1rem; padding: 2rem; }
+            .welcome-date { text-align: left; }
+            .nav-tab { padding: 0.85rem 1.1rem; font-size: 1rem; }
+            .tariff-features { grid-template-columns: 1fr; }
+            .tariff-hero { padding: 2rem; }
+            .tariff-name { font-size: 1.8rem; }
+            .tariff-price { font-size: 2.5rem; }
+            .balance-hero-value { font-size: 3rem; }
+            .support-grid { grid-template-columns: 1fr; }
+            .dashboard { padding: 1.5rem; }
+            .history-table { font-size: 0.9rem; }
+            .history-table th, .history-table td { padding: 0.85rem 0.75rem; }
+            .meditation-phrase { font-size: 1.6rem; min-height: 120px; }
+            .psych-title { font-size: 1.6rem; }
+            .psych-text { font-size: 1.1rem; }
+            .scroll-btn { font-size: 0.85rem; padding: 0.7rem 1.2rem; max-width: 220px; }
         }
     </style>
-<base target="_blank">
 </head>
 <body>
+
     <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
-        <div class="logo-loader">ЗА НОГИ</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
+        <div class="loader-brand"><span>iNum</span>Європа</div>
+        <div class="loader-sub">Ми єднаємо країну у складні часи</div>
+        <div class="loader-ring"></div>
+        <div class="loader-progress-wrap">
+            <div class="loader-progress-bar" id="progressBar"></div>
         </div>
-        <div class="loading-text">Завантаження особистого кабінету...</div>
+        <div class="loader-text">Завантаження особистого кабінету...</div>
+    </div>
+
+    <!-- Psychologist Screen 1 -->
+    <div class="psychologist-screen" id="psychScreen1">
+        <div class="psych-card">
+            <img src="https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/wecare.avif" alt="We Care" class="psych-image">
+            <div class="psych-title">Шановна Валентина Іванівна</div>
+            <div class="psych-text">
+                Компанія "Айнам" турбується про здоров'я своїх абонентів, тому <strong>ОСОБИСТО ДЛЯ ВАС</strong> була підготовлена робота від психолога. Натисніть знизу "Так", щоб побачити
+            </div>
+            <button class="psych-btn" id="psychYesBtn">Так, показати вкладення від психолога</button>
+            <button class="psych-btn secondary" id="psychNoBtn">Ні, перейти до особистого кабінету</button>
+        </div>
+    </div>
+
+    <!-- Psychologist Screen 2 -->
+    <div class="psychologist-screen" id="psychScreen2">
+        <div class="psych-card">
+            <div class="meditation-orb">
+                <img src="https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/alice.jpg" alt="Галя">
+            </div>
+            <div class="psych-title">Доброго дня</div>
+            <div class="psych-text">
+                Мене звуть Галя<br>
+                Я - ваша психологиня
+            </div>
+            <div class="psych-text" style="margin-top: 2rem;">
+                Сьогодні для Вас підготували матеріал. Натисніть "Розпочати", щоб ознайомитись з ним
+            </div>
+            <button class="psych-btn" id="startMeditationBtn">Розпочати</button>
+            <button class="psych-btn secondary" id="backToCabinetBtn">Назад</button>
+        </div>
+    </div>
+
+    <!-- Meditation Screen -->
+    <div class="meditation-screen" id="meditationScreen">
+        <div class="meditation-orb">
+            <img src="https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/alice.jpg" alt="Галя">
+        </div>
+        <div class="meditation-phrase" id="meditationPhrase"></div>
+        <div class="meditation-end" id="meditationEnd">
+            <div class="heart-icon">💚</div>
+            <h2>Всього Вам найкращого!</h2>
+            <p>Мирного дня!</p>
+        </div>
     </div>
 
     <!-- Main Container -->
     <div class="main-container" id="mainContainer">
+
         <!-- Header -->
         <header class="header">
-            <div class="header-content">
-                <div class="brand">ЗА <span>НОГИ</span></div>
+            <div class="header-inner">
+                <div class="brand">
+                    <div class="brand-icon">iN</div>
+                    <div class="brand-text">i<span>Num</span> <span>Europe</span></div>
+                </div>
+                <div class="header-right">
+                    <div class="header-user" id="headerUser" style="display:none;">
+                        <div class="user-avatar">👤</div>
+                        <div>
+                            <div class="user-name">Валентина Іванівна О.</div>
+                            <div class="user-role">Тариф «Пенсійний»</div>
+                        </div>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn" style="display:none;" onclick="doLogout()">Вийти</button>
+                </div>
             </div>
         </header>
 
         <!-- Login Section -->
         <section class="login-section" id="loginSection">
-            <div class="login-welcome">
-                <h1>Вітаємо вас!</h1>
-                <p>Особистий кабінет абонента</p>
+            <div class="login-card">
+                <div class="login-logo">i<span>Num</span> Europe</div>
+                <p class="login-subtitle">Особистий кабінет абонента</p>
+                <button class="login-btn" id="loginBtn">Увійти в кабінет</button>
+                <p class="login-footer">© 2026 iNum Europe. Усі права захищені.<br>Скоп'є, Північна Македонія</p>
             </div>
-            <button class="login-btn" id="loginBtn">Увійти</button>
         </section>
 
         <!-- Dashboard -->
         <div class="dashboard" id="dashboard">
-            <!-- Navigation -->
+
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <div class="welcome-text">
+                    <h2>Ласкаво просимо! 👋</h2>
+                    <p>Ваш тариф «Пенсійний» активний</p>
+                </div>
+                <div class="welcome-date" id="currentDate"></div>
+            </div>
+
+            <!-- Navigation Tabs -->
             <nav class="nav-tabs">
-                <button class="nav-tab active" data-tab="services">Послуги</button>
-                <button class="nav-tab" data-tab="payment">Оплата</button>
-                <button class="nav-tab" data-tab="support">Підтримка</button>
+                <button class="nav-tab active" data-tab="tariff">
+                    <span class="nav-tab-icon">📋</span> Тариф
+                </button>
+                <button class="nav-tab" data-tab="balance">
+                    <span class="nav-tab-icon">💰</span> Баланс
+                </button>
+                <button class="nav-tab" data-tab="health">
+                    <span class="nav-tab-icon">🏥</span> Здоров'я
+                </button>
+                <button class="nav-tab" data-tab="family">
+                    <span class="nav-tab-icon">👨‍👩‍👧</span> Знайомі
+                </button>
+                <button class="nav-tab" data-tab="support">
+                    <span class="nav-tab-icon">📞</span> Підтримка
+                </button>
             </nav>
 
-            <!-- Services Tab -->
-            <div class="tab-content active" id="services">
-                <!-- Balance Cards -->
-                <div class="balance-section">
-                    <div class="balance-card">
-                        <div class="balance-label">Ваш тариф</div>
-                        <div class="balance-value">"Пенсійний"</div>
-                        <div class="balance-sub">Активний</div>
+            <!-- ===== TARIFF TAB ===== -->
+            <div class="tab-content active" id="tariff">
+                <div class="tariff-hero">
+                    <div class="tariff-hero-top">
+                        <div>
+                            <div class="tariff-name">Пенсійний</div>
+                        </div>
+                        <div class="tariff-badge">Активний</div>
                     </div>
-                    <div class="balance-card">
-                        <div class="balance-label">Залишок на рахунку</div>
-                        <div class="balance-value" id="balanceValue">0 грн</div>
-                        <div class="balance-sub" id="dailyCharge">Щоденне списання: 0 грн</div>
+                    <div class="tariff-price-row">
+                        <div class="tariff-price">699 грн</div>
+                        <div class="tariff-price-period">/ місяць</div>
+                    </div>
+                    <div class="tariff-next-payment">
+                        Наступна оплата: <strong id="nextPaymentDate">—</strong> (через <strong id="daysLeft">0</strong> днів)
                     </div>
                 </div>
 
-                <!-- Payment Status -->
-                <div class="next-payment">
-                    <div class="next-payment-label">Статус оплати</div>
-                    <div class="next-payment-value">✓ Оплата пройшла успішно</div>
-                </div>
-
-                <div class="next-payment" style="background: linear-gradient(135deg, #E8F6F3 0%, #D5F5E3 100%); border-left-color: var(--accent);">
-                    <div class="next-payment-label">Наступна оплата через</div>
-                    <div class="next-payment-value" id="daysLeft" style="color: var(--accent);">0 днів</div>
-                </div>
-
-                <!-- Tariff Details -->
-                <div class="card">
+                <div class="card" style="margin-bottom:0;">
                     <div class="card-header">
-                        <div class="card-icon">📋</div>
-                        <div class="card-title">Умови вашого тарифу</div>
+                        <div class="card-icon">📦</div>
+                        <div>
+                            <div class="card-title">Що входить у ваш тариф</div>
+                            <div class="card-subtitle">Усі послуги тарифу «Пенсійний»</div>
+                        </div>
                     </div>
 
-                    <div class="services-grid">
-                        <div class="service-item">
-                            <div class="service-icon">🌐</div>
-                            <div class="service-title">Домашній інтернет</div>
-                            <div class="service-desc"><span class="service-highlight">Безлімітний</span> доступ через телефонний кабель</div>
+                    <div class="tariff-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">🌐</div>
+                            <div class="feature-text">
+                                <h4>Домашній інтернет</h4>
+                                <p>Послуги тимчасово надаються через телефонний кабель <span class="feature-value">ПАТ "Київстар"</span></p>
+                            </div>
                         </div>
 
-                        <div class="service-item">
-                            <div class="service-icon">📺</div>
-                            <div class="service-title">Телебачення</div>
-                            <div class="service-desc"><span class="service-highlight">309 українських каналів</span> у цифровій якості</div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📺</div>
+                            <div class="feature-text">
+                                <h4>Телебачення</h4>
+                                <p><span class="feature-value">210 українських каналів</span> у цифровій якості (новини, цифрові телеканали, фільми та здоров'я)</p>
+                            </div>
                         </div>
 
-                        <div class="service-item">
-                            <div class="service-icon">📱</div>
-                            <div class="service-title">Захищений номер</div>
-                            <div class="service-desc"><span class="service-highlight">068 450 6605</span><br>Тільки для прийому дзвінків та SMS</div>
+                        <div class="feature-item">
+                            <div class="feature-icon cyan-bg">📱</div>
+                            <div class="feature-text">
+                                <h4>Захищений номер</h4>
+                                <p><span class="feature-value">077 650 6605</span> — для прийому дзвінків, SMS та відеорозмов</p>
+                            </div>
                         </div>
 
-                        <div class="service-item">
-                            <div class="service-icon">🔄</div>
-                            <div class="service-title">Безліміт в мережі</div>
-                            <div class="service-desc"><span class="service-highlight">"За Ноги"</span> — необмежені дзвінки та повідомлення</div>
+                        <div class="feature-item">
+                            <div class="feature-icon green-bg">🔄</div>
+                            <div class="feature-text">
+                                <h4>Безлім у мережі iNum</h4>
+                                <p>Необмежені дзвінки та <span class="feature-value green">безлімітні повідомлення</span> на номери iNum</p>
+                            </div>
                         </div>
 
-                        <div class="service-item">
-                            <div class="service-icon">📞</div>
-                            <div class="service-title">Дзвінки на інші мережі</div>
-                            <div class="service-desc"><span class="service-highlight">150 хвилин</span> на Київстар та Vodafone<br><span class="service-highlight">300 хвилин</span> через Viber</div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📞</div>
+                            <div class="feature-text">
+                                <h4>Дзвінки на інші мережі</h4>
+                                <p><span class="feature-value">700 хв</span> на Київстар та Vodafone</p>
+                            </div>
                         </div>
 
-                        <div class="service-item">
-                            <div class="service-icon">📶</div>
-                            <div class="service-title">Мобільний інтернет</div>
-                            <div class="service-desc"><span class="service-highlight">7 ГБ</span> швидкісного мобільного інтернету</div>
+                        <div class="feature-item">
+                            <div class="feature-icon amber-bg">🌍</div>
+                            <div class="feature-text">
+                                <h4>Дзвінки за кордон</h4>
+                                <p><span class="feature-value">300 хвилин</span> міжнародних дзвінків на місяць</p>
+                            </div>
                         </div>
 
-                        <div class="service-item">
-                            <div class="service-icon">✉️</div>
-                            <div class="service-title">SMS-повідомлення</div>
-                            <div class="service-desc"><span class="service-highlight">50 SMS</span> на всі номери України</div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📶</div>
+                            <div class="feature-text">
+                                <h4>Мобільний інтернет</h4>
+                                <p><span class="feature-value">45 ГБ</span> швидкісного мобільного інтернету. Корисний під час вимкнень світла чи коли ви на вулиці</p>
+                            </div>
                         </div>
 
-                        <div class="service-item">
-                            <div class="service-icon">🏥</div>
-                            <div class="service-title">Медична підтримка</div>
-                            <div class="service-desc"><span class="service-highlight">30 хвилин/місяць</span> консультацій з віртуальними лікарями та психологами</div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✉️</div>
+                            <div class="feature-text">
+                                <h4>SMS-повідомлення</h4>
+                                <p><span class="feature-value">99 SMS</span> на всі номери України</p>
+                            </div>
                         </div>
 
-                        <div class="service-item">
-                            <div class="service-icon">📲</div>
-                            <div class="service-title">Номер для вихідних дзвінків</div>
-                            <div class="service-desc"><span class="service-highlight">089 900 3695</span><br>Тільки для дзвінків, не приймає вхідні</div>
+                        <div class="feature-item">
+                            <div class="feature-icon rose-bg">🏥</div>
+                            <div class="feature-text">
+                                <h4>Медична підтримка (ШТУЧНИЙ ІНТЕЛЕКТ)</h4>
+                                <p><span class="feature-value">90 хв/міс</span> консультацій з роботизованими лікарями, психологами та адвокатами</p>
+                            </div>
                         </div>
 
-                        <div class="service-item">
-                            <div class="service-icon">🛰️</div>
-                            <div class="service-title">Супутниковий номер</div>
-                            <div class="service-desc"><span class="service-highlight">+881 8 900 35950</span><br>Дзвінки за кордон за низькими тарифами</div>
+                        <div class="feature-item">
+                            <div class="feature-icon purple-bg">🛰️</div>
+                            <div class="feature-text">
+                                <h4>Міжнародний номер</h4>
+                                <p><span class="feature-value">+883 (5100) 6775-6800</span> — дзвінки за кордон та Україні по супутнику</p>
+                            </div>
                         </div>
 
-                        <div class="service-item">
-                            <div class="service-icon">🔒</div>
-                            <div class="service-title">Додатковий захищений номер</div>
-                            <div class="service-desc"><span class="service-highlight">092 450 6605</span><br>Для користувачів оператора "За Ноги"</div>
+                        <div class="feature-item">
+                            <div class="feature-icon green-bg">🔐</div>
+                            <div class="feature-text">
+                                <h4>Міський номер</h4>
+                                <p><span class="feature-value">061 012 6605</span> — для користувачів iNum Europe</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <div class="feature-icon amber-bg">🎫</div>
+                            <div class="feature-text">
+                                <h4>Безкоштовні карти</h4>
+                                <p>Компанія надсилає <span class="feature-value green">безкоштовні скретч-карти</span> кілька разів на місяць через "Нова Пошта"</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Payment Tab -->
-            <div class="tab-content" id="payment">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">💳</div>
-                        <div class="card-title">Способи оплати</div>
-                    </div>
-
-                    <div class="payment-methods">
-                        <div class="payment-method">
-                            <div class="payment-icon">🏧</div>
-                            <div class="payment-info">
-                                <h3>Термінали iBox</h3>
-                                <p>Швидка та зручна оплата через мережу терміналів iBox по всій Україні. Приймаються готівка та банківські картки. Комісія відсутня.</p>
-                            </div>
-                        </div>
-
-                        <div class="payment-method">
-                            <div class="payment-icon">🏢</div>
-                            <div class="payment-info">
-                                <h3>Точка обслуговування</h3>
-                                <p>Оплата готівкою або перерахунком безпосередньо в офісі оператора. Можливість отримати консультацію та вирішити додаткові питання.</p>
-                                <div class="payment-address">
-                                    <strong>📍 Адреса точки обслуговування:</strong>
-                                    м. Запоріжжя, Заводський район,<br>
-                                    вулиця Передатна, 19
-                                </div>
-                            </div>
-                        </div>
+            <!-- ===== BALANCE TAB ===== -->
+            <div class="tab-content" id="balance">
+                <div class="balance-hero">
+                    <div class="balance-hero-label">Поточний баланс</div>
+                    <div class="balance-hero-value" id="balanceValue">0 грн</div>
+                    <div class="balance-hero-info">
+                        Щоденне списання: <strong id="dailyCharge">0 грн</strong>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-icon">📊</div>
-                        <div class="card-title">Інформація про оплату</div>
+                        <div class="card-icon amber">📊</div>
+                        <div>
+                            <div class="card-title">Рух коштів</div>
+                            <div class="card-subtitle">Історія транзакцій</div>
+                        </div>
                     </div>
-
-                    <div style="line-height: 1.8; color: var(--text);">
-                        <p style="margin-bottom: 1rem;"><strong>Вартість тарифу:</strong> 700 грн/місяць</p>
-                        <p style="margin-bottom: 1rem;"><strong>Періодичність:</strong> Щомісячна оплата (1 числа кожного місяця)</p>
-                        <p style="margin-bottom: 1rem;"><strong>Поточний статус:</strong> <span style="color: var(--accent); font-weight: 600;">✓ Оплачено</span></p>
-                        <p><strong>Щоденне списання:</strong> <span id="paymentDailyCharge">0 грн</span> (пропорційно від вартості тарифу)</p>
+                    <div style="overflow-x:auto;">
+                        <table class="history-table" id="transactionTable">
+                            <thead>
+                                <tr>
+                                    <th>Дата та час</th>
+                                    <th>Опис</th>
+                                    <th>Сума</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionBody"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Support Tab -->
+            <!-- ===== HEALTH TAB ===== -->
+            <div class="tab-content" id="health">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon rose">❤️</div>
+                        <div>
+                            <div class="card-title">Щоденник здоров'я</div>
+                            <div class="card-subtitle">Автоматичні вимірювання вашого розумного браслета</div>
+                        </div>
+                    </div>
+
+                    <div class="health-vitals">
+                        <div class="vital-card">
+                            <div class="vital-icon">❤️</div>
+                            <div class="vital-label">Пульс</div>
+                            <div class="vital-value">72 <span class="vital-unit">уд/хв</span></div>
+                            <div class="vital-status good">Норма</div>
+                        </div>
+                        <div class="vital-card">
+                            <div class="vital-icon">🩸</div>
+                            <div class="vital-label">Тиск</div>
+                            <div class="vital-value">128/82</div>
+                            <div class="vital-status good">Норма</div>
+                        </div>
+                        <div class="vital-card">
+                            <div class="vital-icon">🌡️</div>
+                            <div class="vital-label">Температура</div>
+                            <div class="vital-value">36.6 <span class="vital-unit">°C</span></div>
+                            <div class="vital-status good">Норма</div>
+                        </div>
+                        <div class="vital-card">
+                            <div class="vital-icon">🫁</div>
+                            <div class="vital-label">Кисень</div>
+                            <div class="vital-value">98 <span class="vital-unit">%</span></div>
+                            <div class="vital-status good">Відмінно</div>
+                        </div>
+                        <div class="vital-card">
+                            <div class="vital-icon">🚶</div>
+                            <div class="vital-label">Кроки сьогодні</div>
+                            <div class="vital-value">0</div>
+                            <div class="vital-status good">Добре</div>
+                        </div>
+                        <div class="vital-card">
+                            <div class="vital-icon">😴</div>
+                            <div class="vital-label">Сон минулої ночі</div>
+                            <div class="vital-value">7г 24хв</div>
+                            <div class="vital-status good">Повноцінний</div>
+                        </div>
+                    </div>
+
+                    <div class="ai-recommendation">
+                        <h4>ВИ НЕ НОСИТЕ ФІТНЕС БРАСЛЕТ, ТОМУ ЦІ ДАНІ НАВОДЯТЬСЯ ЛИШЕ ЯК ПРИКЛАД. ЩОБ ЗРУЧНО СТЕЖИТИ ЗА СВОЇМ ЗДОРОВ’ЯМ ПРИДБАЙТЕ БУДЬ-ЯКИЙ ФІТНЕС БРАСЛЕТ</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon cyan">💊</div>
+                        <div>
+                            <div class="card-title">Розклад ліків на сьогодні</div>
+                            <div class="card-subtitle">Автоматичні нагадування від системи</div>
+                        </div>
+                    </div>
+
+                    <div class="medicine-schedule" id="medicineSchedule"></div>
+
+                    <div class="ai-recommendation" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left-color: var(--accent-amber);">
+                        <h4 style="color: #92400e;">⚠️ Увага</h4>
+                        <p>У вас залишилось <strong>7 таблеток Лозартану</strong>. Рекомендуємо замовити поповнення через 3 дні. Натисніть "Підтримка" для допомоги з замовленням.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon purple">📈</div>
+                        <div>
+                            <div class="card-title">Тиждень у графіку</div>
+                            <div class="card-subtitle">Ваше самопочуття за останні 7 днів</div>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; text-align: center;">
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Пн</div>
+                            <div style="height: 100px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
+                            <div style="font-size: 1.5rem;">😊</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Вт</div>
+                            <div style="height: 80px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
+                            <div style="font-size: 1.5rem;">🙂</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Ср</div>
+                            <div style="height: 60px; background: linear-gradient(180deg, #fef3c7 0%, #fcd34d 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
+                            <div style="font-size: 1.5rem;">😐</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Чт</div>
+                            <div style="height: 90px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
+                            <div style="font-size: 1.5rem;">😊</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Пт</div>
+                            <div style="height: 110px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
+                            <div style="font-size: 1.5rem;">😄</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Сб</div>
+                            <div style="height: 100px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
+                            <div style="font-size: 1.5rem;">😊</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Нд</div>
+                            <div style="height: 95px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem; border: 2px solid var(--primary);"></div>
+                            <div style="font-size: 1.5rem;">😊</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== FAMILY TAB ===== -->
+            <div class="tab-content" id="family">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon purple">👨‍👩‍👧</div>
+                        <div>
+                            <div class="card-title">Родинне коло</div>
+                            <div class="card-subtitle">Ваші рідні завжди поруч — навіть на відстані</div>
+                        </div>
+                    </div>
+
+                    <div class="family-members">
+                        <div class="family-card">
+                            <div class="family-avatar dad online">ЄС</div>
+                            <div class="family-name">Євген Стефанович</div>
+                            <div class="family-relation">Представник компанії "Айнам"</div>
+                            <div class="family-status">● У мережі</div>
+                        </div>
+                        <div class="family-card">
+                            <div class="family-avatar mom online">В</div>
+                            <div class="family-name">Віталій</div>
+                            <div class="family-relation">США</div>
+                            <div class="family-status">● У мережі</div>
+                        </div>
+                        <div class="family-card">
+                            <div class="family-avatar grandson">МС</div>
+                            <div class="family-name">Максим</div>
+                            <div class="family-relation">Менеджер</div>
+                            <div class="family-status offline">Був в мережі сьогодні</div>
+                        </div>
+                        <div class="family-card">
+                            <div class="family-avatar son online">ІН</div>
+                            <div class="family-name">Інна</div>
+                            <div class="family-relation">Родич</div>
+                            <div class="family-status">● У мережі. Цей абонент зараз розмовляє</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon cyan">🎙️</div>
+                        <div>
+                            <div class="card-title">Повідомлення від рідних</div>
+                            <div class="card-subtitle">Текстові розшифровки голосових листів</div>
+                        </div>
+                    </div>
+
+                    <div class="family-message">
+                        <div class="message-avatar dad">ЄС</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-sender">Євген</span>
+                                <span class="message-time">Сьогодні</span>
+                            </div>
+                            <div class="message-text">Здравствуйте! Это Евгений. Возможно, у вас есть вопросы?</div>
+                            <div class="message-voice">🎙️ Голосове повідомлення • 0:42</div>
+                        </div>
+                    </div>
+
+                    <div class="family-message">
+                        <div class="message-avatar grandson" style="background: linear-gradient(135deg, #d97706, #f59e0b);">МС</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-sender">Максим</span>
+                                <span class="message-time">Цього місяця</span>
+                            </div>
+                            <div class="message-text">Здравствуйте</div>
+                            <div class="message-voice">🎙️ Голосове повідомлення • 1:15</div>
+                        </div>
+                    </div>
+
+               
+
+            <!-- ===== SUPPORT TAB ===== -->
             <div class="tab-content" id="support">
                 <div class="support-grid">
                     <div class="support-card">
                         <div class="support-icon">📞</div>
                         <div class="support-label">Цілодобова підтримка в мережі</div>
-                        <div class="support-number">999</div>
-                        <p style="color: var(--text-light); font-size: 0.9rem;">Безкоштовно для абонентів "За Ноги"</p>
+                        <div class="support-number">1010</div>
+                        <p style="color:var(--text-light); font-size:1rem; margin-top:0.75rem;">Безкоштовно для абонентів iNum Europe</p>
                     </div>
-
                     <div class="support-card">
-                        <div class="support-icon">🌍</div>
+                        <div class="support-icon" style="background: linear-gradient(135deg, #0891b2 0%, var(--accent) 100%);">🌍</div>
                         <div class="support-label">Міжнародна підтримка</div>
-                        <div class="support-number">+881 8 000 50505</div>
-                        <p style="color: var(--text-light); font-size: 0.9rem;">Дзвінки з-за кордону</p>
+                        <div class="support-number">+883 (5100) 1010-1010</div>
+                        <p style="color:var(--text-light); font-size:1rem; margin-top:0.75rem;">Дзвінки з-за кордону</p>
                     </div>
                 </div>
 
                 <div class="location-card">
                     <div class="location-header">
-                        <div class="location-icon">🏢</div>
-                        <div class="location-title">Центр обслуговування абонентів</div>
+                        <span class="location-icon">🏢</span>
+                        <span class="location-title">Центр обслуговування абонентів</span>
                     </div>
                     <div class="location-address">
-                        м. Запоріжжя<br>
-                        Заводський район<br>
-                        вулиця Передатна, 19
+                        м. Скоп'є, Північна Македонія<br>
+                        вул. 11 Жовтня, 25
                     </div>
                     <div class="location-warning">
-                        <strong>Важливо:</strong> Відвідування офісу можливе <strong>тільки за попередньо узгодженою зустріччю</strong>. Будь ласка, зателефонуйте на лінію підтримки для запису.
+                        <div>
+                            <strong>Важливо:</strong> Відвідування офісу можливе <strong>тільки за попередньо узгодженою зустріччю</strong>. Будь ласка, зателефонуйте на лінію підтримки для запису.
+                        </div>
                     </div>
                 </div>
 
-                <div class="card" style="margin-top: 1.5rem;">
+                <div class="card" style="margin-top:1.5rem;">
                     <div class="card-header">
-                        <div class="card-icon">⏰</div>
-                        <div class="card-title">Графік роботи підтримки</div>
-                    </div>
-                    <div style="display: grid; gap: 0.75rem;">
-                        <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--bg); border-radius: 8px;">
-                            <span>Телефонна підтримка (999)</span>
-                            <strong style="color: var(--accent);">Цілодобово, без вихідних</strong>
+                        <div class="card-icon green">⏰</div>
+                        <div>
+                            <div class="card-title">Графік роботи</div>
+                            <div class="card-subtitle">Коли ми доступні</div>
                         </div>
-                        <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--bg); border-radius: 8px;">
-                            <span>Особистий візит (за записом)</span>
-                            <strong>Пн-Пт: 9:00-18:00</strong>
+                    </div>
+                    <div style="display:grid; gap:0.75rem;">
+                        <div style="display:flex; justify-content:space-between; padding:1rem; background:var(--bg); border-radius:var(--radius-xs);">
+                            <span style="font-size:1.1rem;">Телефонна підтримка (1010)</span>
+                            <strong style="color:var(--accent-green); font-size:1.1rem;">Цілодобово, без вихідних</strong>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding:1rem; background:var(--bg); border-radius:var(--radius-xs);">
+                            <span style="font-size:1.1rem;">Міжнародна підтримка</span>
+                            <strong style="color:var(--accent-green); font-size:1.1rem;">Цілодобово</strong>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding:1rem; background:var(--bg); border-radius:var(--radius-xs);">
+                            <span style="font-size:1.1rem;">Особистий візит (за записом)</span>
+                            <strong style="font-size:1.1rem;">Пн-Пт: 9:00–18:00</strong>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
-<script>
+    <!-- Scroll Buttons -->
+    <button class="scroll-btn scroll" id="scrollBtn">📜 ПРОГОРНУТИ ДАЛІ</button>
+    <button class="scroll-btn next" id="nextBtn" style="display:none;"></button>
+
+    <script>
         // Configuration
-        const TARIFF_FIXED = 700; // Фіксована вартість тарифу - завжди 700 грн
-        const USER_BALANCE = 1400; // Баланс користувача - може бути будь-яким значенням
+        const TARIFF_FIXED = 699;
+        const USER_BALANCE = 1445.42;
+        const COMMISSION = 47.42;
+
+        const meditationPhrases = [
+            "Валентино Іванівно, дозвольте собі зараз просто відпочити й ні про що не хвилюватися.",
+            "Ви за своє життя подарували стільки тепла іншим, тепер час подбати про власний спокій.",
+            "Нехай кожна хвилина цього дня приносить вам душевне умиротворення та тиху радість.",
+            "Валентино Іванівно, ваше здоров'я та спокій — це найголовніше, усе інше може зачекати.",
+            "Пам'ятайте, що будь-яка буря вщухає, і попереду на вас чекають лише світлі та спокійні дні.",
+            "Ми подумки з вами, огортаємо вас турботою і бажаємо якнайшвидшого відновлення сил.",
+            "Нехай серце сповняється тишею, а всі тривоги відлітають як осіннє листя.",
+            "Валентино Іванівно, ви дуже сильна жінка, але зараз дозвольте собі бути просто ніжною та відпочивати.",
+            "Бажаємо вам віднайти той внутрішній спокій, який лікує і душу, і тіло.",
+            "Нехай ваш дім буде затишною гаванню, де немає місця для суму та тривог.",
+            "Ми дуже цінуємо вас і мріємо знову побачити вашу щиру, спокійну посмішку.",
+            "Валентино Іванівно, крок за кроком, день за днем емоційні сили обов'язково повернуться до вас.",
+            "Нехай сьогоднішній вечір подарує вам міцний, глибокий і цілющий сон.",
+            "Ви не самі у своїх переживаннях, ми поруч і завжди готові вас підтримати.",
+            "Нехай кожне слово підтримки від близьких стає для вас ліками та повертає душевну рівновагу.",
+            "Валентино Іванівно, відпустіть усі зайві думки — попереду на вас чекає багато мирних і щасливих митей.",
+            "Бажаємо, щоб ваше серце билося спокійно, а на душі панувала повна гармонія.",
+            "Нехай тепло сонячних променів заглядає у ваше вікно і зігріває ваші думки.",
+            "Валентино Іванівно, бережіть себе, адже ваш спокій — це найбільша цінність для всіх нас.",
+            "Бажаємо вам якнайшвидше одужати від усіх турбот і знову відчути легкість та радість життя"
+        ];
+
+        const audioFiles = [
+            'https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/1.mp3',
+            'https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/2.mp3',
+            'https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/3.mp3'
+        ];
+
+        const medicines = [
+            { time: '08:00', name: 'Лозартан', dose: '50 мг, 1 таблетка після сніданку', taken: true },
+            { time: '13:00', name: 'Метформін', dose: '500 мг, 1 таблетка під час обіду', taken: true },
+            { time: '19:00', name: 'Аторвастатин', dose: '20 мг, 1 таблетка після вечері', taken: false },
+            { time: '21:00', name: 'Магній B6', dose: '2 таблетки перед сном', taken: false }
+        ];
 
         // DOM Elements
         const loadingScreen = document.getElementById('loadingScreen');
@@ -942,67 +1647,181 @@
         const dashboard = document.getElementById('dashboard');
         const navTabs = document.querySelectorAll('.nav-tab');
         const tabContents = document.querySelectorAll('.tab-content');
+        const headerUser = document.getElementById('headerUser');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const psychScreen1 = document.getElementById('psychScreen1');
+        const psychScreen2 = document.getElementById('psychScreen2');
+        const meditationScreen = document.getElementById('meditationScreen');
+        const scrollBtn = document.getElementById('scrollBtn');
+        const nextBtn = document.getElementById('nextBtn');
 
-        // Calculate balance logic
+        const timeLogic = {
+            1: { day: 'пн', time: '21:00' },
+            2: { day: 'вт', time: '11:00' },
+            3: { day: 'ср', time: '09:00' },
+            4: { day: 'чт', time: '09:04' },
+            5: { day: 'пт', time: '06:43' },
+            6: { day: 'сб', time: '05:12' },
+            0: { day: 'нд', time: '04:12' }
+        };
+
+        // Time-based psychologist display
+        function shouldShowPsychologist() {
+            const hour = new Date().getHours();
+            if (hour >= 0 && hour < 11) {
+                return true; // 100% показывается
+            } else {
+                return Math.random() < (1/3); // 1 к 3
+            }
+        }
+
         function calculateBalance() {
             const now = new Date();
             const currentDay = now.getDate();
             const currentMonth = now.getMonth();
             const currentYear = now.getFullYear();
-
-            // Get total days in current month
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-            // Щоденне списання завжди розраховується від ФІКСОВАНОЇ вартості тарифу (700 грн)
-            // Незалежно від того, скільки грошей на рахунку користувача
             const dailyCharge = TARIFF_FIXED / daysInMonth;
-
-            // Calculate remaining days until 1st of next month
             const daysLeft = daysInMonth - currentDay + 1;
-
-            // Скільки днів пройшло з початку місяця (вже списано)
             const daysPassed = currentDay - 1;
-
-            // Скільки вже списано з фіксованого тарифу
             const alreadyCharged = daysPassed * dailyCharge;
-
-            // Залишок по тарифу (не списана частина 700 грн)
             const tariffRemaining = Math.max(0, TARIFF_FIXED - alreadyCharged);
-
-            // Якщо користувач поклав більше ніж 700 грн - решта залишається як "переплата"
-            // Наприклад: 1400 грн = 700 (тариф) + 700 (переплата на наступний місяць)
-            const overpayment = Math.max(0, USER_BALANCE - TARIFF_FIXED);
-
-            // Загальний залишок на рахунку = не списана частина тарифу + переплата
+            const overpayment = Math.max(0, USER_BALANCE - TARIFF_FIXED - COMMISSION);
             const totalBalance = tariffRemaining + overpayment;
 
             return {
                 balance: totalBalance.toFixed(2),
                 dailyCharge: dailyCharge.toFixed(2),
-                daysLeft: daysLeft,
-                tariffRemaining: tariffRemaining.toFixed(2),
-                overpayment: overpayment.toFixed(2)
+                daysLeft: daysLeft
             };
         }
 
-        // Update balance display
+        function generateTransactions() {
+            const storedTransactions = localStorage.getItem('transactions');
+            if (storedTransactions) {
+                return JSON.parse(storedTransactions);
+            }
+
+            const now = new Date();
+            const currentDay = now.getDate();
+            const transactions = [];
+
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+            const dayOfWeek = firstDay.getDay();
+            const timeInfo = timeLogic[dayOfWeek];
+            
+            transactions.push({
+                date: `01.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${timeInfo.time}`,
+                from: 'від кого: Євген Стефанович Міллер',
+                card: 'Карта VISA',
+                amount: '28 EUR = 1445,42 ГРН',
+                description: 'Поповнення рахунку',
+                type: 'credit'
+            });
+
+            const commissionTime = timeInfo.time.split(':');
+            const commissionMinutes = parseInt(commissionTime[1]) + 3;
+            const commissionHour = parseInt(commissionTime[0]) + Math.floor(commissionMinutes / 60);
+            const commissionMin = commissionMinutes % 60;
+            
+            transactions.push({
+                date: `01.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${String(commissionHour).padStart(2, '0')}:${String(commissionMin).padStart(2, '0')}`,
+                from: 'від кого: Євген Стефанович Міллер',
+                card: 'Карта VISA',
+                amount: '-0,92 EUR = -47,42 ГРН',
+                description: 'Зняття комісії з переказу коштів',
+                type: 'debit'
+            });
+
+            if (currentDay >= 4) {
+                const dailyCharge = TARIFF_FIXED / new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+                
+                for (let i = 0; i < 4; i++) {
+                    const dayNum = currentDay - i;
+                    const dayDate = new Date(now.getFullYear(), now.getMonth(), dayNum);
+                    const dayOfWeekInner = dayDate.getDay();
+                    const dayTimeInfo = timeLogic[dayOfWeekInner];
+                    
+                    transactions.push({
+                        date: `${String(dayNum).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${dayTimeInfo.time}`,
+                        from: '',
+                        card: '',
+                        amount: `-${dailyCharge.toFixed(2)} ГРН`,
+                        description: 'Щоденне списання за пакет послуг',
+                        type: 'debit'
+                    });
+                }
+            }
+
+            const finalTransactions = transactions.slice(0, 6);
+            localStorage.setItem('transactions', JSON.stringify(finalTransactions));
+            return finalTransactions;
+        }
+
+        function displayTransactions() {
+            const transactions = generateTransactions();
+            const tbody = document.getElementById('transactionBody');
+            tbody.innerHTML = '';
+
+            transactions.forEach(tx => {
+                const row = document.createElement('tr');
+                const amountColor = tx.type === 'credit' ? 'var(--accent-green)' : 'var(--accent-rose)';
+                
+                row.innerHTML = `
+                    <td>
+                        <div style="font-weight:600;">${tx.date}</div>
+                        ${tx.from ? `<div style="font-size:0.9rem; color:var(--text-light); margin-top:0.25rem;">${tx.from}</div>` : ''}
+                        ${tx.card ? `<div style="font-size:0.9rem; color:var(--text-light);">${tx.card}</div>` : ''}
+                    </td>
+                    <td>${tx.description}</td>
+                    <td style="color:${amountColor}; font-weight:700; font-size:1.1rem;">${tx.amount}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function displayMedicines() {
+            const schedule = document.getElementById('medicineSchedule');
+            if (!schedule) return;
+            
+            schedule.innerHTML = '';
+            medicines.forEach(med => {
+                const item = document.createElement('div');
+                item.className = 'medicine-item';
+                item.innerHTML = `
+                    <div class="medicine-time">${med.time}</div>
+                    <div class="medicine-info">
+                        <div class="medicine-name">${med.name}</div>
+                        <div class="medicine-dose">${med.dose}</div>
+                    </div>
+                    <div class="medicine-check ${med.taken ? '' : 'pending'}">
+                        ${med.taken ? '✓' : '○'}
+                    </div>
+                `;
+                schedule.appendChild(item);
+            });
+        }
+
         function updateBalanceDisplay() {
             const calc = calculateBalance();
             document.getElementById('balanceValue').textContent = calc.balance + ' грн';
-            document.getElementById('dailyCharge').textContent = 'Щоденне списання: ' + calc.dailyCharge + ' грн';
-            document.getElementById('daysLeft').textContent = calc.daysLeft + ' днів';
-            document.getElementById('paymentDailyCharge').textContent = calc.dailyCharge + ' грн';
+            document.getElementById('dailyCharge').textContent = calc.dailyCharge + ' грн';
+            document.getElementById('daysLeft').textContent = calc.daysLeft;
 
-            // Додаткова інформація (опціонально - можна додати в HTML)
-            console.log('Залишок по тарифу:', calc.tariffRemaining + ' грн');
-            console.log('Переплата:', calc.overpayment + ' грн');
+            const now = new Date();
+            const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            const months = ['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
+            document.getElementById('nextPaymentDate').textContent =
+                '1 ' + months[nextMonth.getMonth()] + ' ' + nextMonth.getFullYear();
+
+            const days = ['Неділя','Понеділок','Вівторок','Середа','Четвер','П\'ятниця','Субота'];
+            document.getElementById('currentDate').innerHTML =
+                days[now.getDay()] + '<br>' +
+                now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
         }
 
-        // Loading Animation
         function startLoading() {
-            const minTime = 3000; // 3 seconds
-            const maxTime = 6000; // 6 seconds
-            const duration = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+            const duration = 2500;
             const startTime = Date.now();
 
             function updateProgress() {
@@ -1016,6 +1835,13 @@
                     setTimeout(() => {
                         loadingScreen.classList.add('hidden');
                         mainContainer.classList.add('visible');
+                        
+                        // Time-based logic
+                        if (shouldShowPsychologist()) {
+                            setTimeout(() => {
+                                psychScreen1.classList.add('active');
+                            }, 500);
+                        }
                     }, 300);
                 }
             }
@@ -1023,38 +1849,217 @@
             requestAnimationFrame(updateProgress);
         }
 
-        // Tab Navigation
         function switchTab(tabId) {
             navTabs.forEach(tab => {
                 tab.classList.remove('active');
-                if (tab.dataset.tab === tabId) {
-                    tab.classList.add('active');
-                }
+                if (tab.dataset.tab === tabId) tab.classList.add('active');
             });
-
             tabContents.forEach(content => {
                 content.classList.remove('active');
-                if (content.id === tabId) {
-                    content.classList.add('active');
-                }
+                if (content.id === tabId) content.classList.add('active');
             });
+            
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            setTimeout(updateScrollButtons, 100);
+        }
+
+        function doLogout() {
+            dashboard.classList.remove('active');
+            loginSection.style.display = '';
+            headerUser.style.display = 'none';
+            logoutBtn.style.display = 'none';
+        }
+
+        // Медленная плавная прокрутка через requestAnimationFrame
+        function smoothScrollSlow() {
+            const target = document.documentElement.scrollHeight - window.innerHeight;
+            const start = window.scrollY;
+            const distance = target - start;
+            const duration = 5000; // 5 секунд
+            let startTime = null;
+            
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = timestamp - startTime;
+                const percent = Math.min(progress / duration, 1);
+                // easeInOutQuad для плавности
+                const ease = percent < 0.5 
+                    ? 2 * percent * percent 
+                    : 1 - Math.pow(-2 * percent + 2, 2) / 2;
+                window.scrollTo(0, start + distance * ease);
+                
+                if (progress < duration) {
+                    requestAnimationFrame(step);
+                } else {
+                    setTimeout(updateScrollButtons, 100);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        function updateScrollButtons() {
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = window.innerHeight;
+            const scrollTop = window.scrollY;
+            const maxScroll = scrollHeight - clientHeight;
+            
+            // Скрываем если страница помещается
+            if (scrollHeight <= clientHeight + 50) {
+                scrollBtn.classList.remove('visible');
+                nextBtn.classList.remove('visible');
+                return;
+            }
+            
+            if (scrollTop < maxScroll - 30) {
+                // Еще можно скроллить — показываем кнопку прокрутки
+                scrollBtn.classList.add('visible');
+                nextBtn.classList.remove('visible');
+                nextBtn.style.display = 'none';
+            } else {
+                // Достигнут конец — показываем кнопку перехода
+                scrollBtn.classList.remove('visible');
+                
+                const currentTabId = document.querySelector('.nav-tab.active').dataset.tab;
+                const tabs = Array.from(navTabs).map(t => t.dataset.tab);
+                const currentIndex = tabs.indexOf(currentTabId);
+                
+                if (currentIndex < tabs.length - 1) {
+                    const nextTabId = tabs[currentIndex + 1];
+                    const nextTabElement = document.querySelector(`[data-tab="${nextTabId}"]`);
+                    const nextTabName = nextTabElement.textContent.trim();
+                    nextBtn.textContent = `➡️ НАСТУПНИЙ РОЗДІЛ: ${nextTabName}`;
+                    nextBtn.style.display = 'block';
+                    nextBtn.classList.add('visible');
+                } else {
+                    nextBtn.classList.remove('visible');
+                    nextBtn.style.display = 'none';
+                }
+            }
+        }
+
+        // Медитация - фразы идут по своему таймеру, независимо от аудио
+        function startMeditation() {
+            psychScreen2.classList.remove('active');
+            meditationScreen.classList.add('active');
+            
+            const randomAudio = audioFiles[Math.floor(Math.random() * audioFiles.length)];
+            const audio = new Audio(randomAudio);
+            audio.volume = 0.7;
+            audio.play().catch(e => console.log('Audio error:', e));
+            
+            let phraseIndex = 0;
+            const phraseElement = document.getElementById('meditationPhrase');
+            
+            function showNextPhrase() {
+                if (phraseIndex >= meditationPhrases.length) {
+                    endMeditation();
+                    return;
+                }
+                
+                phraseElement.textContent = meditationPhrases[phraseIndex];
+                phraseElement.classList.remove('fading');
+                // Показываем фразу (fade-in 3 секунды)
+                phraseElement.classList.add('visible');
+                
+                // Держим фразу 15 секунд, затем fade-out 3 секунды
+                setTimeout(() => {
+                    phraseElement.classList.remove('visible');
+                    phraseElement.classList.add('fading');
+                    
+                    // После fade-out ждём 15 секунд перед следующей фразой
+                    setTimeout(() => {
+                        phraseElement.classList.remove('fading');
+                        phraseIndex++;
+                        showNextPhrase();
+                    }, 3000 + 15000); // 3s fade-out + 15s пауза
+                }, 15000); // 15 секунд показа
+            }
+            
+            function endMeditation() {
+                audio.pause();
+                phraseElement.classList.remove('visible', 'fading');
+                phraseElement.style.display = 'none';
+                document.getElementById('meditationEnd').classList.add('active');
+                
+                setTimeout(() => {
+                    meditationScreen.classList.remove('active');
+                    loginSection.style.display = 'none';
+                    dashboard.classList.add('active');
+                    headerUser.style.display = 'flex';
+                    logoutBtn.style.display = '';
+                    updateBalanceDisplay();
+                    displayTransactions();
+                    displayMedicines();
+                    setTimeout(updateScrollButtons, 100);
+                }, 4000);
+            }
+            
+            showNextPhrase();
         }
 
         // Event Listeners
         navTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                switchTab(tab.dataset.tab);
-            });
+            tab.addEventListener('click', () => switchTab(tab.dataset.tab));
         });
 
         loginBtn.addEventListener('click', () => {
             loginSection.style.display = 'none';
             dashboard.classList.add('active');
+            headerUser.style.display = 'flex';
+            logoutBtn.style.display = '';
             updateBalanceDisplay();
+            displayTransactions();
+            displayMedicines();
+            setTimeout(updateScrollButtons, 100);
         });
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            startLoading();
+        document.getElementById('psychYesBtn').addEventListener('click', () => {
+            psychScreen1.classList.remove('active');
+            psychScreen2.classList.add('active');
         });
+
+        document.getElementById('psychNoBtn').addEventListener('click', () => {
+            psychScreen1.classList.remove('active');
+            loginSection.style.display = 'none';
+            dashboard.classList.add('active');
+            headerUser.style.display = 'flex';
+            logoutBtn.style.display = '';
+            updateBalanceDisplay();
+            displayTransactions();
+            displayMedicines();
+            setTimeout(updateScrollButtons, 100);
+        });
+
+        document.getElementById('startMeditationBtn').addEventListener('click', startMeditation);
+
+        document.getElementById('backToCabinetBtn').addEventListener('click', () => {
+            psychScreen2.classList.remove('active');
+            loginSection.style.display = 'none';
+            dashboard.classList.add('active');
+            headerUser.style.display = 'flex';
+            logoutBtn.style.display = '';
+            updateBalanceDisplay();
+            displayTransactions();
+            displayMedicines();
+            setTimeout(updateScrollButtons, 100);
+        });
+
+        scrollBtn.addEventListener('click', smoothScrollSlow);
+        
+        nextBtn.addEventListener('click', () => {
+            const currentTabId = document.querySelector('.nav-tab.active').dataset.tab;
+            const tabs = Array.from(navTabs).map(t => t.dataset.tab);
+            const currentIndex = tabs.indexOf(currentTabId);
+            
+            if (currentIndex < tabs.length - 1) {
+                switchTab(tabs[currentIndex + 1]);
+            }
+        });
+
+        window.addEventListener('scroll', updateScrollButtons);
+        window.addEventListener('resize', updateScrollButtons);
+
+        document.addEventListener('DOMContentLoaded', startLoading);
     </script>
+</body>
+</html>
