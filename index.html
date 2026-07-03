@@ -2,2064 +2,1288 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Особистий кабінет | iNum Europe</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         :root {
-            --primary: #1a56db;
-            --primary-light: #3b82f6;
-            --primary-dark: #1e40af;
-            --secondary: #0f172a;
-            --accent: #06b6d4;
-            --accent-green: #10b981;
-            --accent-amber: #f59e0b;
-            --accent-rose: #f43f5e;
-            --accent-purple: #8b5cf6;
-            --bg: #f0f4f8;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --text-lighter: #94a3b8;
-            --border: #e2e8f0;
-            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 10px 30px rgba(0,0,0,0.06);
-            --shadow-lg: 0 10px 25px rgba(0,0,0,0.08), 0 20px 50px rgba(0,0,0,0.06);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --radius-xs: 6px;
+            --primary: #1E3A8A;
+            --primary-dark: #1E40AF;
+            --accent: #F59E0B;
+            --accent-light: #FDE68A;
+            --secondary: #0F172A;
+            --bg: #F4F7FC;
+            --card-bg: #FFFFFF;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --border: #E2E8F0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.1);
+            --radius: 20px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            overflow-x: hidden;
-            font-size: 1.1rem;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* ===== LOADING SCREEN ===== */
+        /* Загрузка */
         .loading-screen {
             position: fixed;
             inset: 0;
-            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+            background: linear-gradient(145deg, #0b1e3c 0%, #13294b 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-
         .loading-screen.hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
-
-        .loader-brand {
-            font-size: 3rem;
-            font-weight: 900;
-            color: white;
-            letter-spacing: -2px;
-            margin-bottom: 0.25rem;
-            animation: loaderPulse 2s ease-in-out infinite;
-        }
-
-        .loader-brand span {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .loader-sub {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.85rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 3rem;
-        }
-
-        @keyframes loaderPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-        }
-
-        .loader-ring {
-            width: 60px;
-            height: 60px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1.5rem;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .loader-progress-wrap {
-            width: 240px;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .loader-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--primary-light));
-            border-radius: 2px;
-            width: 0%;
-            transition: width 0.15s linear;
-        }
-
-        .loader-text {
-            color: rgba(255,255,255,0.4);
-            margin-top: 1rem;
-            font-size: 0.8rem;
-        }
-
-        /* ===== PSYCHOLOGIST SCREENS ===== */
-        .psychologist-screen {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(160deg, #f0f4f8 0%, #e8eef5 100%);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9998;
-            padding: 2rem;
-            overflow-y: auto;
-        }
-
-        .psychologist-screen.active { display: flex; }
-
-        .psych-card {
-            background: white;
-            border-radius: 24px;
-            padding: 3rem;
-            box-shadow: var(--shadow-lg);
-            text-align: center;
-            max-width: 600px;
-            width: 100%;
-        }
-
-        .psych-image {
-            width: 300px;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 2rem;
-            border: 8px solid var(--accent);
-        }
-
-        .psych-title {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--secondary);
-            margin-bottom: 1.5rem;
-            line-height: 1.3;
-        }
-
-        .psych-text {
-            font-size: 1.3rem;
-            color: var(--text-light);
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-
-        .psych-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            padding: 1.5rem 3rem;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-radius: 14px;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(26,86,219,0.35);
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
-        .psych-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(26,86,219,0.45);
-        }
-
-        .psych-btn.secondary {
-            background: var(--border);
-            color: var(--text);
-        }
-
-        /* ===== MEDITATION SCREEN ===== */
-        .meditation-screen {
-            position: fixed;
-            inset: 0;
-            background: #000000;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9998;
-            padding: 3rem;
-        }
-
-        .meditation-screen.active { display: flex; }
-
-        .meditation-orb {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 8px solid var(--accent);
-            margin-bottom: 3rem;
-            box-shadow: 0 0 60px rgba(6,182,212,0.4);
-        }
-
-        .meditation-orb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .meditation-phrase {
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: white;
-            text-align: center;
-            max-width: 800px;
-            line-height: 1.4;
-            opacity: 0;
-            transition: opacity 3s ease-in;
-            min-height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .meditation-phrase.visible {
-            opacity: 1;
-            transition: opacity 3s ease-in;
-        }
-
-        .meditation-phrase.fading {
-            opacity: 0;
-            transition: opacity 3s ease-out;
-        }
-
-        .meditation-end {
-            text-align: center;
-            display: none;
-        }
-
-        .meditation-end.active { display: block; }
-
-        .heart-icon {
-            font-size: 6rem;
-            margin-bottom: 2rem;
-            animation: heartbeat 1.5s ease-in-out infinite;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .meditation-end h2 {
+        .logo-loader {
             font-size: 2.5rem;
+            font-weight: 700;
             color: white;
-            margin-bottom: 1rem;
+            margin-bottom: 2.5rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+        }
+        .logo-loader .brand-accent {
+            color: var(--accent);
+            font-weight: 800;
+        }
+        .progress-container {
+            width: 260px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        .loading-text {
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 1rem;
+            font-size: 0.9rem;
         }
 
-        .meditation-end p {
-            font-size: 1.8rem;
-            color: rgba(255,255,255,0.8);
-        }
-
-        /* ===== MAIN CONTAINER ===== */
         .main-container {
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-container.visible {
+            opacity: 1;
         }
 
-        .main-container.visible { opacity: 1; }
-
-        /* ===== HEADER ===== */
+        /* Шапка */
         .header {
-            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 100%);
-            padding: 0;
+            background: linear-gradient(to right, #0f1e3a, #1a2f4f);
+            padding: 1.2rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
-
-        .header-inner {
-            max-width: 1100px;
+        .header-content {
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .brand {
-            font-size: 2rem;
-            font-weight: 900;
-            color: white;
-            letter-spacing: -1px;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .brand-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            color: white;
-            font-weight: 800;
-        }
-
-        .brand-text span {
-            font-weight: 400;
-            opacity: 0.7;
-            font-size: 0.85em;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .header-user {
-            display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 1rem;
-            color: white;
         }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
-            border-radius: 50%;
+        .brand {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 1px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: white;
-            font-weight: 700;
+            align-items: baseline;
+            gap: 0.25rem;
+        }
+        .brand .brand-accent {
+            color: var(--accent);
+        }
+        .header-badge {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            color: #f1f5f9;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .user-name { font-size: 1.1rem; font-weight: 600; }
-        .user-role { font-size: 0.9rem; opacity: 0.6; }
-
-        .logout-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-xs);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .logout-btn:hover { background: rgba(255,255,255,0.2); }
-
-        /* ===== LOGIN SECTION ===== */
+        /* Вход */
         .login-section {
-            min-height: calc(100vh - 80px);
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 3rem;
-            background: linear-gradient(180deg, var(--bg) 0%, #e8eef5 100%);
+            padding: 2rem;
+            background: radial-gradient(circle at 20% 30%, #eef2fb 0%, #f4f7fc 80%);
         }
-
-        .login-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 4rem;
-            box-shadow: var(--shadow-lg);
+        .login-welcome {
             text-align: center;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .login-logo {
-            font-size: 3rem;
-            font-weight: 900;
-            color: var(--secondary);
-            margin-bottom: 0.5rem;
-            letter-spacing: -1px;
-        }
-
-        .login-logo span { color: var(--primary); }
-
-        .login-subtitle {
-            color: var(--text-light);
-            font-size: 1.2rem;
             margin-bottom: 3rem;
         }
-
+        .login-welcome h1 {
+            font-size: 2.3rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        .login-welcome p {
+            color: var(--text-light);
+            font-size: 1.2rem;
+        }
         .login-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
+            background: var(--accent);
+            color: #0f172a;
             border: none;
-            padding: 1.5rem 4rem;
+            padding: 1.2rem 4rem;
             font-size: 1.3rem;
             font-weight: 700;
-            border-radius: 14px;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(26,86,219,0.35);
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-            width: 100%;
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+            transition: all var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-
         .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(26,86,219,0.45);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 35px rgba(245, 158, 11, 0.55);
+            background: #fbbf24;
         }
 
-        .login-footer {
-            margin-top: 2.5rem;
-            font-size: 0.95rem;
-            color: var(--text-lighter);
-        }
-
-        /* ===== DASHBOARD ===== */
+        /* Дашборд */
         .dashboard {
             display: none;
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1.5rem;
+            flex: 1;
+            width: 100%;
         }
-
         .dashboard.active {
             display: block;
             animation: fadeUp 0.5s ease;
         }
-
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(25px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ===== WELCOME BANNER ===== */
-        .welcome-banner {
-            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 60%, #1a56db 100%);
-            border-radius: var(--radius);
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .welcome-text h2 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-
-        .welcome-text p { opacity: 0.7; font-size: 1.1rem; }
-        .welcome-date { text-align: right; font-size: 1rem; opacity: 0.6; }
-
-        /* ===== NAV TABS ===== */
+        /* Вкладки */
         .nav-tabs {
             display: flex;
             gap: 0.5rem;
             margin-bottom: 2rem;
             background: var(--card-bg);
             padding: 0.5rem;
-            border-radius: 14px;
+            border-radius: 18px;
             box-shadow: var(--shadow);
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
         }
-
-        .nav-tabs::-webkit-scrollbar { display: none; }
-
         .nav-tab {
-            flex-shrink: 0;
-            padding: 1rem 1.5rem;
+            flex: 1;
+            min-width: 110px;
+            padding: 0.9rem 1.4rem;
             border: none;
             background: transparent;
             color: var(--text-light);
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            border-radius: var(--radius-sm);
-            transition: all 0.25s ease;
+            border-radius: 14px;
+            transition: all var(--transition);
             white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
-
-        .nav-tab:hover { background: var(--bg); color: var(--text); }
-
+        .nav-tab:hover {
+            background: #f1f5f9;
+            color: var(--text);
+        }
         .nav-tab.active {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 12px rgba(26,86,219,0.3);
+            box-shadow: 0 6px 15px rgba(30, 58, 138, 0.3);
         }
 
-        .nav-tab-icon { font-size: 1.3rem; }
-
-        /* ===== TAB CONTENT ===== */
-        .tab-content { display: none; }
-
+        .tab-content {
+            display: none;
+        }
         .tab-content.active {
             display: block;
             animation: slideIn 0.35s ease;
         }
-
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateX(15px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        /* ===== CARDS ===== */
+        /* Карточки */
         .card {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 2rem;
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
             box-shadow: var(--shadow);
+            transition: all var(--transition);
         }
-
         .card-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.25rem;
-            border-bottom: 1px solid var(--border);
+            gap: 0.75rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
         }
-
         .card-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.6rem;
-            flex-shrink: 0;
+            font-size: 1.5rem;
         }
-
-        .card-icon.green { background: linear-gradient(135deg, #059669 0%, var(--accent-green) 100%); }
-        .card-icon.amber { background: linear-gradient(135deg, #d97706 0%, var(--accent-amber) 100%); }
-        .card-icon.rose { background: linear-gradient(135deg, #e11d48 0%, var(--accent-rose) 100%); }
-        .card-icon.cyan { background: linear-gradient(135deg, #0891b2 0%, var(--accent) 100%); }
-        .card-icon.purple { background: linear-gradient(135deg, #7c3aed 0%, var(--accent-purple) 100%); }
-
-        .card-title { font-size: 1.4rem; font-weight: 700; color: var(--secondary); }
-        .card-subtitle { font-size: 1rem; color: var(--text-lighter); margin-top: 0.25rem; }
-
-        /* ===== TARIFF HERO ===== */
-        .tariff-hero {
-            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #1a56db 100%);
-            border-radius: var(--radius);
-            padding: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: white;
-        }
-
-        .tariff-hero-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-        }
-
-        .tariff-name { font-size: 2.2rem; font-weight: 900; }
-
-        .tariff-badge {
-            background: rgba(16,185,129,0.2);
-            color: #6ee7b7;
-            padding: 0.5rem 1.25rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 700;
-        }
-
-        .tariff-price-row {
-            display: flex;
-            align-items: baseline;
-            gap: 0.75rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .tariff-price { font-size: 3rem; font-weight: 900; }
-        .tariff-price-period { font-size: 1.2rem; opacity: 0.6; }
-        .tariff-next-payment { font-size: 1.1rem; opacity: 0.6; }
-        .tariff-next-payment strong { color: #6ee7b7; }
-
-        /* ===== TARIFF FEATURES ===== */
-        .tariff-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1rem;
-        }
-
-        .feature-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 1.5rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            transition: all 0.25s ease;
-        }
-
-        .feature-item:hover {
-            border-color: var(--primary-light);
-            box-shadow: var(--shadow);
-            transform: translateX(3px);
-        }
-
-        .feature-icon {
-            width: 54px;
-            height: 54px;
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            flex-shrink: 0;
-        }
-
-        .feature-icon.green-bg { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); }
-        .feature-icon.amber-bg { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); }
-        .feature-icon.rose-bg { background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); }
-        .feature-icon.cyan-bg { background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%); }
-        .feature-icon.purple-bg { background: linear-gradient(135deg, #faf5ff 0%, #ede9fe 100%); }
-
-        .feature-text h4 {
-            font-size: 1.15rem;
+        .card-title {
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--secondary);
+        }
+
+        /* Тариф — главный блок */
+        .tariff-hero {
+            background: linear-gradient(115deg, #0f1e3a 0%, #1e3050 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        .tariff-hero .tariff-badge {
+            background: var(--accent);
+            color: #0f172a;
+            font-weight: 800;
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+        .tariff-hero h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .tariff-hero .status-badge {
+            background: #10b981;
+            color: white;
+            padding: 0.45rem 1.3rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .tariff-hero .status-badge::before {
+            content: '';
+            width: 9px;
+            height: 9px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 1.8s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1.2rem;
+        }
+        .service-item {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 1.3rem;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+        .service-item:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+            transform: translateY(-3px);
+        }
+        .service-item::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--accent);
+            transform: scaleY(0);
+            transition: transform 0.25s ease;
+        }
+        .service-item:hover::after {
+            transform: scaleY(1);
+        }
+        .service-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.7rem;
+        }
+        .service-title {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.4rem;
+            font-size: 1.05rem;
+        }
+        .service-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        .service-highlight {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Баланс и счёт */
+        .balance-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .balance-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 18px;
+            text-align: center;
+        }
+        .balance-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .balance-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.2rem;
+            color: var(--accent);
+        }
+        .balance-sub {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        
+        .next-payment-banner {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: #0f172a;
+            padding: 2rem;
+            border-radius: 18px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);
+        }
+        .next-payment-banner h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
             margin-bottom: 0.3rem;
         }
 
-        .feature-text p { font-size: 1rem; color: var(--text-light); line-height: 1.6; }
-        .feature-value { color: var(--primary); font-weight: 700; }
-        .feature-value.green { color: var(--accent-green); }
-
-        /* ===== BALANCE HERO ===== */
-        .balance-hero {
-            background: linear-gradient(160deg, #059669 0%, var(--accent-green) 100%);
-            border-radius: var(--radius);
-            padding: 3rem;
-            margin-bottom: 2rem;
-            color: white;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .balance-hero-label { font-size: 1.2rem; opacity: 0.9; margin-bottom: 1rem; }
-        .balance-hero-value { font-size: 4rem; font-weight: 900; margin-bottom: 1rem; }
-        .balance-hero-info { font-size: 1.1rem; opacity: 0.8; }
-
-        /* ===== HISTORY TABLE ===== */
-        .history-table { width: 100%; border-collapse: collapse; }
-
-        .history-table th {
-            text-align: left;
-            padding: 1rem 1.25rem;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-lighter);
-            border-bottom: 2px solid var(--border);
-            font-weight: 600;
-        }
-
-        .history-table td {
-            padding: 1.25rem;
-            font-size: 1rem;
-            border-bottom: 1px solid var(--border);
-            color: var(--text);
-        }
-
-        .history-table tr:last-child td { border-bottom: none; }
-        .history-table tr:hover td { background: #f8fafc; }
-
-        /* ===== HEALTH SECTION ===== */
-        .health-vitals {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .vital-card {
-            background: white;
-            border-radius: var(--radius-sm);
-            padding: 1.5rem;
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .vital-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
-        .vital-label { font-size: 0.95rem; color: var(--text-light); margin-bottom: 0.5rem; }
-        .vital-value { font-size: 2rem; font-weight: 800; color: var(--secondary); }
-        .vital-unit { font-size: 1rem; color: var(--text-light); font-weight: 500; }
-        .vital-status {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        .vital-status.good { background: #d1fae5; color: #065f46; }
-        .vital-status.warn { background: #fef3c7; color: #92400e; }
-
-        .medicine-schedule {
-            display: grid;
-            gap: 0.75rem;
-        }
-
-        .medicine-item {
+        /* Оплата */
+        .payment-method {
+            background: #fff;
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            padding: 1.4rem;
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.25rem;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-        }
-
-        .medicine-time {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-xs);
-            font-weight: 700;
-            font-size: 1.1rem;
-            min-width: 80px;
-            text-align: center;
-        }
-
-        .medicine-info { flex: 1; }
-        .medicine-name { font-weight: 700; color: var(--secondary); font-size: 1.1rem; }
-        .medicine-dose { color: var(--text-light); font-size: 0.95rem; margin-top: 0.2rem; }
-
-        .medicine-check {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--accent-green);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .medicine-check.pending {
-            background: var(--border);
-            color: var(--text-lighter);
-        }
-
-        .ai-recommendation {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border-left: 4px solid var(--primary);
-            padding: 1.5rem;
-            border-radius: var(--radius-sm);
-            margin-top: 1rem;
-        }
-
-        .ai-recommendation h4 {
-            color: var(--primary-dark);
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .ai-recommendation p {
-            color: var(--text);
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        /* ===== FAMILY CIRCLE ===== */
-        .family-members {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-        }
-
-        .family-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .family-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .family-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            font-weight: 700;
-            position: relative;
-        }
-
-        .family-avatar.online::after {
-            content: '';
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            width: 16px;
-            height: 16px;
-            background: var(--accent-green);
-            border: 3px solid white;
-            border-radius: 50%;
-        }
-
-        .family-avatar.dad { background: linear-gradient(135deg, #1e40af, #3b82f6); }
-        .family-avatar.mom { background: linear-gradient(135deg, #be185d, #ec4899); }
-        .family-avatar.son { background: linear-gradient(135deg, #059669, #10b981); }
-        .family-avatar.grandson { background: linear-gradient(135deg, #d97706, #f59e0b); }
-
-        .family-name { font-size: 1.15rem; font-weight: 700; color: var(--secondary); }
-        .family-relation { color: var(--text-light); font-size: 0.95rem; margin-bottom: 0.5rem; }
-        .family-status { font-size: 0.9rem; color: var(--accent-green); font-weight: 600; }
-        .family-status.offline { color: var(--text-lighter); }
-
-        .family-message {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            gap: 1rem;
             align-items: flex-start;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
         }
-
-        .message-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+        .payment-method:hover {
+            border-color: var(--accent);
+        }
+        .payment-icon {
+            width: 55px;
+            height: 55px;
+            background: #eef2ff;
+            color: var(--primary);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: 700;
+            font-size: 1.7rem;
             flex-shrink: 0;
         }
-
-        .message-content { flex: 1; }
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-        .message-sender { font-weight: 700; color: var(--secondary); }
-        .message-time { color: var(--text-lighter); font-size: 0.9rem; }
-        .message-text { color: var(--text); line-height: 1.6; }
-        .message-voice {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-            padding: 0.5rem 0.75rem;
-            background: #eff6ff;
-            border-radius: var(--radius-xs);
-            color: var(--primary);
-            font-size: 0.9rem;
-            font-weight: 600;
+        .office-address {
+            background: #fef9e7;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            border-radius: 0 12px 12px 0;
+            margin-top: 0.8rem;
+            font-weight: 500;
         }
 
-        /* ===== SUPPORT ===== */
-        .support-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-        }
-
+        /* Поддержка */
         .support-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 2rem;
-            box-shadow: var(--shadow);
+            background: #fff;
+            border-radius: 20px;
+            padding: 1.6rem;
             text-align: center;
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
         }
-
         .support-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
         }
-
-        .support-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            color: white;
-            font-size: 2rem;
-        }
-
         .support-number {
             font-size: 1.8rem;
             font-weight: 800;
             color: var(--primary);
-            margin-bottom: 0.5rem;
+            margin: 0.5rem 0;
         }
-
-        .support-label { color: var(--text-light); font-size: 1.1rem; }
-
-        .location-card {
-            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 100%);
+        .location-block {
+            background: #0f172a;
             color: white;
-            border-radius: var(--radius);
-            padding: 2rem;
+            border-radius: 18px;
+            padding: 1.5rem;
             margin-top: 1.5rem;
         }
 
-        .location-header {
-            display: flex;
+        /* Екран Психолога */
+        .psych-screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #ffffff;
+            z-index: 10000;
+            flex-direction: column;
             align-items: center;
-            gap: 0.75rem;
+            justify-content: flex-start;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .psych-profile {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+        }
+        .psych-photo {
+            width: 802px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
             margin-bottom: 1rem;
         }
-
-        .location-icon { font-size: 1.6rem; }
-        .location-title { font-size: 1.3rem; font-weight: 700; }
-
-        .location-address {
-            font-size: 1.15rem;
-            line-height: 1.7;
-            margin-bottom: 1.25rem;
-            padding-left: 2.5rem;
-            opacity: 0.85;
-        }
-
-        .location-warning {
-            background: rgba(255,255,255,0.08);
-            padding: 1rem 1.25rem;
-            border-radius: var(--radius-xs);
-            font-size: 1rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            line-height: 1.6;
-        }
-
-        .location-warning::before { content: '⚠️'; flex-shrink: 0; }
-
-        /* ===== SCROLL BUTTONS ===== */
-        .scroll-btn {
-            position: fixed;
-            bottom: 1.5rem;
-            padding: 0.85rem 1.5rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 0.95rem;
+        .psych-name {
+            font-size: 2rem;
             font-weight: 700;
+            color: #0f172a;
+        }
+        .psych-bio {
+            font-size: 1rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+            line-height: 1.5;
+        }
+        .psych-status {
+            color: #10b981;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+        .psych-status::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 800px;
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 2rem;
+            min-height: 150px;
+            max-height: 50vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .chat-bubble {
+            background: #ffffff;
+            padding: 1.2rem 1.5rem;
+            border-radius: 20px 20px 20px 4px;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #0f172a;
+            width: fit-content;
+            max-width: 100%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            white-space: pre-wrap;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        .psych-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .psych-btn {
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(26,86,219,0.4);
+            border: none;
             transition: all 0.3s ease;
-            z-index: 99;
-            display: none;
-            max-width: 280px;
+            background: #F59E0B;
+            color: #0f172a;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
         }
-
-        .scroll-btn.visible { display: block; }
-
-        .scroll-btn:hover {
+        .psych-btn:hover {
+            background: #fbbf24;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(26,86,219,0.5);
         }
 
-        .scroll-btn.next {
-            left: 1.5rem;
-            background: linear-gradient(135deg, var(--accent-green) 0%, #059669 100%);
-        }
-
-        .scroll-btn.scroll { right: 1.5rem; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            body { font-size: 1rem; }
-            .header-inner { padding: 1rem 1.5rem; }
-            .brand { font-size: 1.5rem; }
-            .user-name, .user-role { display: none; }
-            .login-card { padding: 2.5rem 2rem; }
-            .login-logo { font-size: 2.5rem; }
-            .welcome-banner { flex-direction: column; gap: 1rem; padding: 2rem; }
-            .welcome-date { text-align: left; }
-            .nav-tab { padding: 0.85rem 1.1rem; font-size: 1rem; }
-            .tariff-features { grid-template-columns: 1fr; }
-            .tariff-hero { padding: 2rem; }
-            .tariff-name { font-size: 1.8rem; }
-            .tariff-price { font-size: 2.5rem; }
-            .balance-hero-value { font-size: 3rem; }
-            .support-grid { grid-template-columns: 1fr; }
-            .dashboard { padding: 1.5rem; }
-            .history-table { font-size: 0.9rem; }
-            .history-table th, .history-table td { padding: 0.85rem 0.75rem; }
-            .meditation-phrase { font-size: 1.6rem; min-height: 120px; }
-            .psych-title { font-size: 1.6rem; }
-            .psych-text { font-size: 1.1rem; }
-            .scroll-btn { font-size: 0.85rem; padding: 0.7rem 1.2rem; max-width: 220px; }
+        @media (max-width: 640px) {
+            .balance-section {
+                grid-template-columns: 1fr;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .tariff-hero {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .nav-tab {
+                padding: 0.7rem 1rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-
-    <!-- Loading Screen -->
+    <!-- Загрузка -->
     <div class="loading-screen" id="loadingScreen">
-        <div class="loader-brand"><span>iNum</span>Європа</div>
-        <div class="loader-sub">Ми єднаємо країну у складні часи</div>
-        <div class="loader-ring"></div>
-        <div class="loader-progress-wrap">
-            <div class="loader-progress-bar" id="progressBar"></div>
+        <div class="logo-loader">Europe</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
         </div>
-        <div class="loader-text">Завантаження особистого кабінету...</div>
+        <div class="loading-text">Підготовка особистого кабінету...</div>
     </div>
 
-    <!-- Psychologist Screen 1 -->
-    <div class="psychologist-screen" id="psychScreen1">
-        <div class="psych-card">
-            <img src="https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/wecare.avif" alt="We Care" class="psych-image">
-            <div class="psych-title">Шановна Валентина Іванівна</div>
-            <div class="psych-text">
-                Компанія "Айнам" турбується про здоров'я своїх абонентів, тому <strong>ОСОБИСТО ДЛЯ ВАС</strong> була підготовлена робота від психолога. Натисніть знизу "Так", щоб побачити
-            </div>
-            <button class="psych-btn" id="psychYesBtn">Так, показати вкладення від психолога</button>
-            <button class="psych-btn secondary" id="psychNoBtn">Ні, перейти до особистого кабінету</button>
+    <!-- Екран Психолога -->
+    <div id="psychScreen" class="psych-screen">
+        <div class="psych-profile">
+            <img src="olena.png" alt="Олена Марковська" class="psych-photo" width="802" height="768">
+            <div class="psych-name">Олена Марковська</div>
+            <div class="psych-bio">Психолог з 20-річним стажем. Живе в Запоріжжі на вул. Ладозькій, працює вчителем у школі. Навчалася в Запоріжжі та Європі. Консультації для Валентини Іванівни повністю безкоштовні (від європейської компанії).</div>
+            <div class="psych-status">У мережі</div>
         </div>
-    </div>
-
-    <!-- Psychologist Screen 2 -->
-    <div class="psychologist-screen" id="psychScreen2">
-        <div class="psych-card">
-            <div class="meditation-orb">
-                <img src="https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/alice.jpg" alt="Галя">
-            </div>
-            <div class="psych-title">Доброго дня</div>
-            <div class="psych-text">
-                Мене звуть Галя<br>
-                Я - ваша психологиня
-            </div>
-            <div class="psych-text" style="margin-top: 2rem;">
-                Сьогодні для Вас підготували матеріал. Натисніть "Розпочати", щоб ознайомитись з ним
-            </div>
-            <button class="psych-btn" id="startMeditationBtn">Розпочати</button>
-            <button class="psych-btn secondary" id="backToCabinetBtn">Назад</button>
+        <div class="chat-container" id="chatContainer"></div>
+        <div class="psych-buttons" id="psychButtons" style="display: none;">
+            <button class="psych-btn" id="btnSkip">Перейти до кабінету</button>
         </div>
     </div>
 
-    <!-- Meditation Screen -->
-    <div class="meditation-screen" id="meditationScreen">
-        <div class="meditation-orb">
-            <img src="https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/alice.jpg" alt="Галя">
-        </div>
-        <div class="meditation-phrase" id="meditationPhrase"></div>
-        <div class="meditation-end" id="meditationEnd">
-            <div class="heart-icon">💚</div>
-            <h2>Всього Вам найкращого!</h2>
-            <p>Мирного дня!</p>
-        </div>
-    </div>
-
-    <!-- Main Container -->
     <div class="main-container" id="mainContainer">
-
-        <!-- Header -->
+        <!-- Шапка -->
         <header class="header">
-            <div class="header-inner">
-                <div class="brand">
-                    <div class="brand-icon">iN</div>
-                    <div class="brand-text">i<span>Num</span> <span>Europe</span></div>
-                </div>
-                <div class="header-right">
-                    <div class="header-user" id="headerUser" style="display:none;">
-                        <div class="user-avatar">👤</div>
-                        <div>
-                            <div class="user-name">Валентина Іванівна О.</div>
-                            <div class="user-role">Тариф «Пенсійний»</div>
-                        </div>
-                    </div>
-                    <button class="logout-btn" id="logoutBtn" style="display:none;" onclick="doLogout()">Вийти</button>
-                </div>
+            <div class="header-content">
+                <div class="brand">iNum <span class="brand-accent">Europe</span></div>
+                <div class="header-badge">Особистий кабінет</div>
             </div>
         </header>
 
-        <!-- Login Section -->
+        <!-- Экран входа -->
         <section class="login-section" id="loginSection">
-            <div class="login-card">
-                <div class="login-logo">i<span>Num</span> Europe</div>
-                <p class="login-subtitle">Особистий кабінет абонента</p>
-                <button class="login-btn" id="loginBtn">Увійти в кабінет</button>
-                <p class="login-footer">© 2026 iNum Europe. Усі права захищені.<br>Скоп'є, Північна Македонія</p>
+            <div class="login-welcome">
+                <h1>Вітаємо в iNum Europe!</h1>
+                <p>Ваш надійний зв'язок та турбота</p>
             </div>
+            <button class="login-btn" id="loginBtn">Увійти</button>
         </section>
 
-        <!-- Dashboard -->
+        <!-- Дашборд -->
         <div class="dashboard" id="dashboard">
-
-            <!-- Welcome Banner -->
-            <div class="welcome-banner">
-                <div class="welcome-text">
-                    <h2>Ласкаво просимо! 👋</h2>
-                    <p>Ваш тариф «Пенсійний» активний</p>
-                </div>
-                <div class="welcome-date" id="currentDate"></div>
-            </div>
-
-            <!-- Navigation Tabs -->
+            <!-- Навигация -->
             <nav class="nav-tabs">
-                <button class="nav-tab active" data-tab="tariff">
-                    <span class="nav-tab-icon">📋</span> Тариф
-                </button>
-                <button class="nav-tab" data-tab="balance">
-                    <span class="nav-tab-icon">💰</span> Баланс
-                </button>
-                <button class="nav-tab" data-tab="health">
-                    <span class="nav-tab-icon">🏥</span> Здоров'я
-                </button>
-                <button class="nav-tab" data-tab="family">
-                    <span class="nav-tab-icon">👨‍👩‍👧</span> Знайомі
-                </button>
-                <button class="nav-tab" data-tab="support">
-                    <span class="nav-tab-icon">📞</span> Підтримка
-                </button>
+                <button class="nav-tab active" data-tab="tariff">Мій тариф</button>
+                <button class="nav-tab" data-tab="billing">Рахунок і оплата</button>
+                <button class="nav-tab" data-tab="support">Підтримка</button>
             </nav>
 
-            <!-- ===== TARIFF TAB ===== -->
+                 <!-- Вкладка: Мій тариф -->
             <div class="tab-content active" id="tariff">
                 <div class="tariff-hero">
-                    <div class="tariff-hero-top">
-                        <div>
-                            <div class="tariff-name">Пенсійний</div>
-                        </div>
-                        <div class="tariff-badge">Активний</div>
+                    <div>
+                        <span class="tariff-badge">★ Пенсійний (9.50€)</span>
+                        <h2>Ваш тариф активний</h2>
+                        <p style="opacity:0.9; margin-top:0.3rem;">Повний пакет послуг Айнам Європа</p>
                     </div>
-                    <div class="tariff-price-row">
-                        <div class="tariff-price">699 грн</div>
-                        <div class="tariff-price-period">/ місяць</div>
-                    </div>
-                    <div class="tariff-next-payment">
-                        Наступна оплата: <strong id="nextPaymentDate">—</strong> (через <strong id="daysLeft">0</strong> днів)
-                    </div>
+                    <div class="status-badge">● Активний</div>
                 </div>
 
-                <div class="card" style="margin-bottom:0;">
-                    <div class="card-header">
-                        <div class="card-icon">📦</div>
-                        <div>
-                            <div class="card-title">Що входить у ваш тариф</div>
-                            <div class="card-subtitle">Усі послуги тарифу «Пенсійний»</div>
-                        </div>
+                <div class="card">
+                    <div class="card-header" style="border-bottom: none; padding-bottom: 0.5rem;">
+                        <div class="card-icon" style="background: var(--accent);">📋</div>
+                        <div class="card-title">Що включено у ваш тариф</div>
                     </div>
-
-                    <div class="tariff-features">
-                        <div class="feature-item">
-                            <div class="feature-icon">🌐</div>
-                            <div class="feature-text">
-                                <h4>Домашній інтернет</h4>
-                                <p>Послуги тимчасово надаються через телефонний кабель <span class="feature-value">ПАТ "Київстар"</span></p>
-                            </div>
+                    <div class="services-grid">
+                        <div class="service-item">
+                            <div class="service-icon">🌐</div>
+                            <div class="service-title">Інтернет</div>
+                            <div class="service-desc"><span class="service-highlight">Безлімітний</span> доступ через оптоволокно партнера чи супутник</div>
                         </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon">📺</div>
-                            <div class="feature-text">
-                                <h4>Телебачення</h4>
-                                <p><span class="feature-value">210 українських каналів</span> у цифровій якості (новини, цифрові телеканали, фільми та здоров'я)</p>
-                            </div>
+                        <div class="service-item">
+                            <div class="service-icon">📺</div>
+                            <div class="service-title">Телебачення</div>
+                            <div class="service-desc"><span class="service-highlight">350 каналів</span> по категоріям</div>
                         </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon cyan-bg">📱</div>
-                            <div class="feature-text">
-                                <h4>Захищений номер</h4>
-                                <p><span class="feature-value">077 650 6605</span> — для прийому дзвінків, SMS та відеорозмов</p>
-                            </div>
+                        <div class="service-item">
+                            <div class="service-icon">📱</div>
+                            <div class="service-title">Номер для людей, у яких інший оператор</div>
+                            <div class="service-desc"><span class="service-highlight">089 900 3695</span><br></div>
                         </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon green-bg">🔄</div>
-                            <div class="feature-text">
-                                <h4>Безлім у мережі iNum</h4>
-                                <p>Необмежені дзвінки та <span class="feature-value green">безлімітні повідомлення</span> на номери iNum</p>
-                            </div>
+                        <div class="service-item">
+                            <div class="service-icon">📲</div>
+                            <div class="service-title">Номер для тих, у кого є iNum</div>
+                            <div class="service-desc"><span class="service-highlight">092 450 6605</span><br></div>
                         </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon">📞</div>
-                            <div class="feature-text">
-                                <h4>Дзвінки на інші мережі</h4>
-                                <p><span class="feature-value">700 хв</span> на Київстар та Vodafone</p>
-                            </div>
+                        <div class="service-item">
+                            <div class="service-icon">📞</div>
+                            <div class="service-title">Дзвінки на номери інших операторів</div>
+                            <div class="service-desc"><span class="service-highlight">100 хвилин</span> на Київстар та Водафон. <span class="service-highlight">Після вичерпання - 0.7 грн/хв</span></div>
                         </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon amber-bg">🌍</div>
-                            <div class="feature-text">
-                                <h4>Дзвінки за кордон</h4>
-                                <p><span class="feature-value">300 хвилин</span> міжнародних дзвінків на місяць</p>
-                            </div>
+                        <div class="service-item">
+                            <div class="service-icon">🌍</div>
+                            <div class="service-title">Дзвінки за кордон</div>
+                            <div class="service-desc"><span class="service-highlight">400 хвилин</span> на міжнародні номери</div>
                         </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon">📶</div>
-                            <div class="feature-text">
-                                <h4>Мобільний інтернет</h4>
-                                <p><span class="feature-value">45 ГБ</span> швидкісного мобільного інтернету. Корисний під час вимкнень світла чи коли ви на вулиці</p>
-                            </div>
+                        <div class="service-item">
+                            <div class="service-icon">🎁</div>
+                            <div class="service-title">Скретч-картки</div>
+                            <div class="service-desc"><span class="service-highlight">Кілька разів на місяць</span> безкоштовна розсилка скретч-карток Новою Поштою</div>
                         </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon">✉️</div>
-                            <div class="feature-text">
-                                <h4>SMS-повідомлення</h4>
-                                <p><span class="feature-value">99 SMS</span> на всі номери України</p>
-                            </div>
+                        <div class="service-item">
+                            <div class="service-icon">✉️</div>
+                            <div class="service-title">SMS-повідомлення</div>
+                            <div class="service-desc"><span class="service-highlight">50 SMS</span> на всі номери України</div>
                         </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon rose-bg">🏥</div>
-                            <div class="feature-text">
-                                <h4>Медична підтримка (ШТУЧНИЙ ІНТЕЛЕКТ)</h4>
-                                <p><span class="feature-value">90 хв/міс</span> консультацій з роботизованими лікарями, психологами та адвокатами</p>
-                            </div>
-                        </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon purple-bg">🛰️</div>
-                            <div class="feature-text">
-                                <h4>Міжнародний номер</h4>
-                                <p><span class="feature-value">+883 (5100) 6775-6800</span> — дзвінки за кордон та Україні по супутнику</p>
-                            </div>
-                        </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon green-bg">🔐</div>
-                            <div class="feature-text">
-                                <h4>Міський номер</h4>
-                                <p><span class="feature-value">061 012 6605</span> — для користувачів iNum Europe</p>
-                            </div>
-                        </div>
-
-                        <div class="feature-item">
-                            <div class="feature-icon amber-bg">🎫</div>
-                            <div class="feature-text">
-                                <h4>Безкоштовні карти</h4>
-                                <p>Компанія надсилає <span class="feature-value green">безкоштовні скретч-карти</span> кілька разів на місяць через "Нова Пошта"</p>
-                            </div>
+                        <div class="service-item">
+                            <div class="service-icon">🏥</div>
+                            <div class="service-title">Медична підтримка</div>
+                            <div class="service-desc"><span class="service-highlight">350 хвилин/місяць</span> консультацій лікарів та психологів</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ===== BALANCE TAB ===== -->
-            <div class="tab-content" id="balance">
-                <div class="balance-hero">
-                    <div class="balance-hero-label">Поточний баланс</div>
-                    <div class="balance-hero-value" id="balanceValue">0 грн</div>
-                    <div class="balance-hero-info">
-                        Щоденне списання: <strong id="dailyCharge">0 грн</strong>
+            <!-- Вкладка: Рахунок і оплата -->
+            <div class="tab-content" id="billing">
+                <div class="next-payment-banner">
+                    <h3>Наступне поповнення у вересні</h3>
+                    <p style="font-weight: 500;">Поточний розрахунковий період оплачено</p>
+                </div>
+
+                <div class="balance-section">
+                    <div class="balance-card">
+                        <div class="balance-label">Залишок на рахунку</div>
+                        <div class="balance-value" id="balanceValue">0 грн</div>
+                        <div class="balance-sub">Щоденне списання: <span id="dailyChargeSpan">0</span> грн</div>
+                    </div>
+                    <div class="balance-card">
+                        <div class="balance-label">Наступна оплата</div>
+                        <div class="balance-value" id="daysLeftVal">0</div>
+                        <div class="balance-sub">днів</div>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-icon amber">📊</div>
+                        <div class="card-icon">💳</div>
+                        <div class="card-title">Способи поповнення</div>
+                    </div>
+                    <div class="payment-method">
+                        <div class="payment-icon">🏧</div>
                         <div>
-                            <div class="card-title">Рух коштів</div>
-                            <div class="card-subtitle">Історія транзакцій</div>
+                            <strong>Термінали iBox</strong>
+                            <p style="color: var(--text-light);">Готівкою або карткою без комісії по всій Україні.</p>
                         </div>
                     </div>
-                    <div style="overflow-x:auto;">
-                        <table class="history-table" id="transactionTable">
-                            <thead>
-                                <tr>
-                                    <th>Дата та час</th>
-                                    <th>Опис</th>
-                                    <th>Сума</th>
-                                </tr>
-                            </thead>
-                            <tbody id="transactionBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===== HEALTH TAB ===== -->
-            <div class="tab-content" id="health">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon rose">❤️</div>
+                    <div class="payment-method">
+                        <div class="payment-icon">🏢</div>
                         <div>
-                            <div class="card-title">Щоденник здоров'я</div>
-                            <div class="card-subtitle">Автоматичні вимірювання вашого розумного браслета</div>
+                            <strong>Офіс iNum Europe</strong>
+                            <p style="color: var(--text-light);">Особисте поповнення та консультація.</p>
+                            <div class="office-address">
+                                📍 Північна Македонія, м. Скоп'є<br>
+                                вул. 11 Жовтня, 25
+                            </div>
                         </div>
                     </div>
-
-                    <div class="health-vitals">
-                        <div class="vital-card">
-                            <div class="vital-icon">❤️</div>
-                            <div class="vital-label">Пульс</div>
-                            <div class="vital-value">72 <span class="vital-unit">уд/хв</span></div>
-                            <div class="vital-status good">Норма</div>
-                        </div>
-                        <div class="vital-card">
-                            <div class="vital-icon">🩸</div>
-                            <div class="vital-label">Тиск</div>
-                            <div class="vital-value">128/82</div>
-                            <div class="vital-status good">Норма</div>
-                        </div>
-                        <div class="vital-card">
-                            <div class="vital-icon">🌡️</div>
-                            <div class="vital-label">Температура</div>
-                            <div class="vital-value">36.6 <span class="vital-unit">°C</span></div>
-                            <div class="vital-status good">Норма</div>
-                        </div>
-                        <div class="vital-card">
-                            <div class="vital-icon">🫁</div>
-                            <div class="vital-label">Кисень</div>
-                            <div class="vital-value">98 <span class="vital-unit">%</span></div>
-                            <div class="vital-status good">Відмінно</div>
-                        </div>
-                        <div class="vital-card">
-                            <div class="vital-icon">🚶</div>
-                            <div class="vital-label">Кроки сьогодні</div>
-                            <div class="vital-value">0</div>
-                            <div class="vital-status good">Добре</div>
-                        </div>
-                        <div class="vital-card">
-                            <div class="vital-icon">😴</div>
-                            <div class="vital-label">Сон минулої ночі</div>
-                            <div class="vital-value">7г 24хв</div>
-                            <div class="vital-status good">Повноцінний</div>
-                        </div>
-                    </div>
-
-                    <div class="ai-recommendation">
-                        <h4>ВИ НЕ НОСИТЕ ФІТНЕС БРАСЛЕТ, ТОМУ ЦІ ДАНІ НАВОДЯТЬСЯ ЛИШЕ ЯК ПРИКЛАД. ЩОБ ЗРУЧНО СТЕЖИТИ ЗА СВОЇМ ЗДОРОВ’ЯМ ПРИДБАЙТЕ БУДЬ-ЯКИЙ ФІТНЕС БРАСЛЕТ</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon cyan">💊</div>
+                    <div class="payment-method">
+                        <div class="payment-icon">💳</div>
                         <div>
-                            <div class="card-title">Розклад ліків на сьогодні</div>
-                            <div class="card-subtitle">Автоматичні нагадування від системи</div>
-                        </div>
-                    </div>
-
-                    <div class="medicine-schedule" id="medicineSchedule"></div>
-
-                    <div class="ai-recommendation" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left-color: var(--accent-amber);">
-                        <h4 style="color: #92400e;">⚠️ Увага</h4>
-                        <p>У вас залишилось <strong>7 таблеток Лозартану</strong>. Рекомендуємо замовити поповнення через 3 дні. Натисніть "Підтримка" для допомоги з замовленням.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon purple">📈</div>
-                        <div>
-                            <div class="card-title">Тиждень у графіку</div>
-                            <div class="card-subtitle">Ваше самопочуття за останні 7 днів</div>
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; text-align: center;">
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Пн</div>
-                            <div style="height: 100px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
-                            <div style="font-size: 1.5rem;">😊</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Вт</div>
-                            <div style="height: 80px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
-                            <div style="font-size: 1.5rem;">🙂</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Ср</div>
-                            <div style="height: 60px; background: linear-gradient(180deg, #fef3c7 0%, #fcd34d 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
-                            <div style="font-size: 1.5rem;">😐</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Чт</div>
-                            <div style="height: 90px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
-                            <div style="font-size: 1.5rem;">😊</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Пт</div>
-                            <div style="height: 110px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
-                            <div style="font-size: 1.5rem;">😄</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Сб</div>
-                            <div style="height: 100px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem;"></div>
-                            <div style="font-size: 1.5rem;">😊</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Нд</div>
-                            <div style="height: 95px; background: linear-gradient(180deg, #d1fae5 0%, #6ee7b7 100%); border-radius: 8px; margin-bottom: 0.25rem; border: 2px solid var(--primary);"></div>
-                            <div style="font-size: 1.5rem;">😊</div>
+                            <strong>Євро карта</strong>
+                            <p style="color: var(--text-light);">Поповнення з європейської банківської картки.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ===== FAMILY TAB ===== -->
-            <div class="tab-content" id="family">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon purple">👨‍👩‍👧</div>
-                        <div>
-                            <div class="card-title">Родинне коло</div>
-                            <div class="card-subtitle">Ваші рідні завжди поруч — навіть на відстані</div>
-                        </div>
-                    </div>
-
-                    <div class="family-members">
-                        <div class="family-card">
-                            <div class="family-avatar dad online">ЄС</div>
-                            <div class="family-name">Євген Стефанович</div>
-                            <div class="family-relation">Представник компанії "Айнам"</div>
-                            <div class="family-status">● У мережі</div>
-                        </div>
-                        <div class="family-card">
-                            <div class="family-avatar mom online">В</div>
-                            <div class="family-name">Віталій</div>
-                            <div class="family-relation">США</div>
-                            <div class="family-status">● У мережі</div>
-                        </div>
-                        <div class="family-card">
-                            <div class="family-avatar grandson">МС</div>
-                            <div class="family-name">Максим</div>
-                            <div class="family-relation">Менеджер</div>
-                            <div class="family-status offline">Був в мережі сьогодні</div>
-                        </div>
-                        <div class="family-card">
-                            <div class="family-avatar son online">ІН</div>
-                            <div class="family-name">Інна</div>
-                            <div class="family-relation">Родич</div>
-                            <div class="family-status">● У мережі. Цей абонент зараз розмовляє</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon cyan">🎙️</div>
-                        <div>
-                            <div class="card-title">Повідомлення від рідних</div>
-                            <div class="card-subtitle">Текстові розшифровки голосових листів</div>
-                        </div>
-                    </div>
-
-                    <div class="family-message">
-                        <div class="message-avatar dad">ЄС</div>
-                        <div class="message-content">
-                            <div class="message-header">
-                                <span class="message-sender">Євген</span>
-                                <span class="message-time">Сьогодні</span>
-                            </div>
-                            <div class="message-text">Здравствуйте! Это Евгений. Возможно, у вас есть вопросы?</div>
-                            <div class="message-voice">🎙️ Голосове повідомлення • 0:42</div>
-                        </div>
-                    </div>
-
-                    <div class="family-message">
-                        <div class="message-avatar grandson" style="background: linear-gradient(135deg, #d97706, #f59e0b);">МС</div>
-                        <div class="message-content">
-                            <div class="message-header">
-                                <span class="message-sender">Максим</span>
-                                <span class="message-time">Цього місяця</span>
-                            </div>
-                            <div class="message-text">Здравствуйте</div>
-                            <div class="message-voice">🎙️ Голосове повідомлення • 1:15</div>
-                        </div>
-                    </div>
-
-               
-
-            <!-- ===== SUPPORT TAB ===== -->
+            <!-- Вкладка: Підтримка -->
             <div class="tab-content" id="support">
-                <div class="support-grid">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
                     <div class="support-card">
-                        <div class="support-icon">📞</div>
-                        <div class="support-label">Цілодобова підтримка в мережі</div>
+                        <div>📞</div>
+                        <strong>Підтримка в мережі</strong>
                         <div class="support-number">1010</div>
-                        <p style="color:var(--text-light); font-size:1rem; margin-top:0.75rem;">Безкоштовно для абонентів iNum Europe</p>
+                        <p style="color: var(--text-light);">Цілодобово, безкоштовно</p>
                     </div>
                     <div class="support-card">
-                        <div class="support-icon" style="background: linear-gradient(135deg, #0891b2 0%, var(--accent) 100%);">🌍</div>
-                        <div class="support-label">Міжнародна підтримка</div>
-                        <div class="support-number">+883 (5100) 1010-1010</div>
-                        <p style="color:var(--text-light); font-size:1rem; margin-top:0.75rem;">Дзвінки з-за кордону</p>
+                        <div>🌍</div>
+                        <strong>Міжнародна лінія</strong>
+                        <div class="support-number">+883 51000 1010</div>
+                        <p style="color: var(--text-light);">Дзвінки з-за кордону</p>
                     </div>
                 </div>
 
-                <div class="location-card">
-                    <div class="location-header">
-                        <span class="location-icon">🏢</span>
-                        <span class="location-title">Центр обслуговування абонентів</span>
-                    </div>
-                    <div class="location-address">
-                        м. Скоп'є, Північна Македонія<br>
-                        вул. 11 Жовтня, 25
-                    </div>
-                    <div class="location-warning">
-                        <div>
-                            <strong>Важливо:</strong> Відвідування офісу можливе <strong>тільки за попередньо узгодженою зустріччю</strong>. Будь ласка, зателефонуйте на лінію підтримки для запису.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" style="margin-top:1.5rem;">
-                    <div class="card-header">
-                        <div class="card-icon green">⏰</div>
-                        <div>
-                            <div class="card-title">Графік роботи</div>
-                            <div class="card-subtitle">Коли ми доступні</div>
-                        </div>
-                    </div>
-                    <div style="display:grid; gap:0.75rem;">
-                        <div style="display:flex; justify-content:space-between; padding:1rem; background:var(--bg); border-radius:var(--radius-xs);">
-                            <span style="font-size:1.1rem;">Телефонна підтримка (1010)</span>
-                            <strong style="color:var(--accent-green); font-size:1.1rem;">Цілодобово, без вихідних</strong>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; padding:1rem; background:var(--bg); border-radius:var(--radius-xs);">
-                            <span style="font-size:1.1rem;">Міжнародна підтримка</span>
-                            <strong style="color:var(--accent-green); font-size:1.1rem;">Цілодобово</strong>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; padding:1rem; background:var(--bg); border-radius:var(--radius-xs);">
-                            <span style="font-size:1.1rem;">Особистий візит (за записом)</span>
-                            <strong style="font-size:1.1rem;">Пн-Пт: 9:00–18:00</strong>
-                        </div>
-                    </div>
+                <div class="location-block">
+                    <strong>🏢 Центр обслуговування абонентів</strong><br><br>
+                    Північна Македонія<br>
+                    м. Скоп'є<br>
+                    вул. 11 Жовтня, 25<br><br>
+                    <span style="background: #fbbf24; color: #0f172a; padding: 0.2rem 0.8rem; border-radius: 20px; font-weight: bold;">⚠️ Тільки за попереднім записом</span>
+                    <p style="margin-top: 0.8rem; font-size: 0.9rem; opacity: 0.8;">Телефонуйте на 1010 для узгодження візиту. Графік: Пн–Пт 9:00–18:00.</p>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- Scroll Buttons -->
-    <button class="scroll-btn scroll" id="scrollBtn">📜 ПРОГОРНУТИ ДАЛІ</button>
-    <button class="scroll-btn next" id="nextBtn" style="display:none;"></button>
-
     <script>
-        // Configuration
-        const TARIFF_FIXED = 699;
-        const USER_BALANCE = 1445.42;
-        const COMMISSION = 47.42;
+        (function() {
+            const TARIFF_FIXED = 475;
+            const USER_BALANCE = 5700;
 
-        const meditationPhrases = [
-            "Валентино Іванівно, дозвольте собі зараз просто відпочити й ні про що не хвилюватися.",
-            "Ви за своє життя подарували стільки тепла іншим, тепер час подбати про власний спокій.",
-            "Нехай кожна хвилина цього дня приносить вам душевне умиротворення та тиху радість.",
-            "Валентино Іванівно, ваше здоров'я та спокій — це найголовніше, усе інше може зачекати.",
-            "Пам'ятайте, що будь-яка буря вщухає, і попереду на вас чекають лише світлі та спокійні дні.",
-            "Ми подумки з вами, огортаємо вас турботою і бажаємо якнайшвидшого відновлення сил.",
-            "Нехай серце сповняється тишею, а всі тривоги відлітають як осіннє листя.",
-            "Валентино Іванівно, ви дуже сильна жінка, але зараз дозвольте собі бути просто ніжною та відпочивати.",
-            "Бажаємо вам віднайти той внутрішній спокій, який лікує і душу, і тіло.",
-            "Нехай ваш дім буде затишною гаванню, де немає місця для суму та тривог.",
-            "Ми дуже цінуємо вас і мріємо знову побачити вашу щиру, спокійну посмішку.",
-            "Валентино Іванівно, крок за кроком, день за днем емоційні сили обов'язково повернуться до вас.",
-            "Нехай сьогоднішній вечір подарує вам міцний, глибокий і цілющий сон.",
-            "Ви не самі у своїх переживаннях, ми поруч і завжди готові вас підтримати.",
-            "Нехай кожне слово підтримки від близьких стає для вас ліками та повертає душевну рівновагу.",
-            "Валентино Іванівно, відпустіть усі зайві думки — попереду на вас чекає багато мирних і щасливих митей.",
-            "Бажаємо, щоб ваше серце билося спокійно, а на душі панувала повна гармонія.",
-            "Нехай тепло сонячних променів заглядає у ваше вікно і зігріває ваші думки.",
-            "Валентино Іванівно, бережіть себе, адже ваш спокій — це найбільша цінність для всіх нас.",
-            "Бажаємо вам якнайшвидше одужати від усіх турбот і знову відчути легкість та радість життя"
-        ];
-
-        const audioFiles = [
-            'https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/1.mp3',
-            'https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/2.mp3',
-            'https://raw.githubusercontent.com/maximbezecky-creator/service830133/main/3.mp3'
-        ];
-
-        const medicines = [
-            { time: '08:00', name: 'Лозартан', dose: '50 мг, 1 таблетка після сніданку', taken: true },
-            { time: '13:00', name: 'Метформін', dose: '500 мг, 1 таблетка під час обіду', taken: true },
-            { time: '19:00', name: 'Аторвастатин', dose: '20 мг, 1 таблетка після вечері', taken: false },
-            { time: '21:00', name: 'Магній B6', dose: '2 таблетки перед сном', taken: false }
-        ];
-
-        // DOM Elements
-        const loadingScreen = document.getElementById('loadingScreen');
-        const progressBar = document.getElementById('progressBar');
-        const mainContainer = document.getElementById('mainContainer');
-        const loginSection = document.getElementById('loginSection');
-        const loginBtn = document.getElementById('loginBtn');
-        const dashboard = document.getElementById('dashboard');
-        const navTabs = document.querySelectorAll('.nav-tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const headerUser = document.getElementById('headerUser');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const psychScreen1 = document.getElementById('psychScreen1');
-        const psychScreen2 = document.getElementById('psychScreen2');
-        const meditationScreen = document.getElementById('meditationScreen');
-        const scrollBtn = document.getElementById('scrollBtn');
-        const nextBtn = document.getElementById('nextBtn');
-
-        const timeLogic = {
-            1: { day: 'пн', time: '21:00' },
-            2: { day: 'вт', time: '11:00' },
-            3: { day: 'ср', time: '09:00' },
-            4: { day: 'чт', time: '09:04' },
-            5: { day: 'пт', time: '06:43' },
-            6: { day: 'сб', time: '05:12' },
-            0: { day: 'нд', time: '04:12' }
-        };
-
-        // Time-based psychologist display
-        function shouldShowPsychologist() {
-            const hour = new Date().getHours();
-            if (hour >= 0 && hour < 11) {
-                return true; // 100% показывается
-            } else {
-                return Math.random() < (1/3); // 1 к 3
-            }
-        }
-
-        function calculateBalance() {
-            const now = new Date();
-            const currentDay = now.getDate();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const dailyCharge = TARIFF_FIXED / daysInMonth;
-            const daysLeft = daysInMonth - currentDay + 1;
-            const daysPassed = currentDay - 1;
-            const alreadyCharged = daysPassed * dailyCharge;
-            const tariffRemaining = Math.max(0, TARIFF_FIXED - alreadyCharged);
-            const overpayment = Math.max(0, USER_BALANCE - TARIFF_FIXED - COMMISSION);
-            const totalBalance = tariffRemaining + overpayment;
-
-            return {
-                balance: totalBalance.toFixed(2),
-                dailyCharge: dailyCharge.toFixed(2),
-                daysLeft: daysLeft
-            };
-        }
-
-        function generateTransactions() {
-            const storedTransactions = localStorage.getItem('transactions');
-            if (storedTransactions) {
-                return JSON.parse(storedTransactions);
+            function calculateBalance() {
+                const now = new Date();
+                const currentDay = now.getDate();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+                const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                const dailyCharge = TARIFF_FIXED / daysInMonth;
+                const daysLeft = daysInMonth - currentDay + 1;
+                const daysPassed = currentDay - 1;
+                const alreadyCharged = daysPassed * dailyCharge;
+                const tariffRemaining = Math.max(0, TARIFF_FIXED - alreadyCharged);
+                const overpayment = Math.max(0, USER_BALANCE - TARIFF_FIXED);
+                const totalBalance = tariffRemaining + overpayment;
+                return {
+                    balance: totalBalance.toFixed(2),
+                    dailyCharge: dailyCharge.toFixed(2),
+                    daysLeft,
+                    tariffRemaining: tariffRemaining.toFixed(2),
+                    overpayment: overpayment.toFixed(2)
+                };
             }
 
-            const now = new Date();
-            const currentDay = now.getDate();
-            const transactions = [];
+            function updateBalances() {
+                const calc = calculateBalance();
+                const balanceEl = document.getElementById('balanceValue');
+                const dailyEl = document.getElementById('dailyChargeSpan');
+                const daysEl = document.getElementById('daysLeftVal');
+                if (balanceEl) balanceEl.textContent = calc.balance + ' грн';
+                if (dailyEl) dailyEl.textContent = calc.dailyCharge;
+                if (daysEl) daysEl.textContent = calc.daysLeft;
+            }
 
-            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-            const dayOfWeek = firstDay.getDay();
-            const timeInfo = timeLogic[dayOfWeek];
-            
-            transactions.push({
-                date: `01.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${timeInfo.time}`,
-                from: 'від кого: Євген Стефанович Міллер',
-                card: 'Карта VISA',
-                amount: '28 EUR = 1445,42 ГРН',
-                description: 'Поповнення рахунку',
-                type: 'credit'
-            });
+            const loadingScreen = document.getElementById('loadingScreen');
+            const progressBar = document.getElementById('progressBar');
+            const mainContainer = document.getElementById('mainContainer');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginSection = document.getElementById('loginSection');
+            const dashboard = document.getElementById('dashboard');
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const psychScreen = document.getElementById('psychScreen');
+            const chatContainer = document.getElementById('chatContainer');
+            const psychButtons = document.getElementById('psychButtons');
+            const btnSkip = document.getElementById('btnSkip');
 
-            const commissionTime = timeInfo.time.split(':');
-            const commissionMinutes = parseInt(commissionTime[1]) + 3;
-            const commissionHour = parseInt(commissionTime[0]) + Math.floor(commissionMinutes / 60);
-            const commissionMin = commissionMinutes % 60;
-            
-            transactions.push({
-                date: `01.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${String(commissionHour).padStart(2, '0')}:${String(commissionMin).padStart(2, '0')}`,
-                from: 'від кого: Євген Стефанович Міллер',
-                card: 'Карта VISA',
-                amount: '-0,92 EUR = -47,42 ГРН',
-                description: 'Зняття комісії з переказу коштів',
-                type: 'debit'
-            });
+            // 220 коротких життєвих порад
+            const allQuotes = [
+                "Утро начинайте не с новостей, а с глубокого вдоха.",
+                "Позвольте себе быть несовершенной – это нормально.",
+                "Одинокими нас делают не стены, а мысли.",
+                "Старость – не болезнь, а время для мудрости.",
+                "Если тяжело – выдохните медленнее, чем вдохнули.",
+                "Хвалите себя за каждую маленькую сделанную вещь.",
+                "Иногда лучшее, что можно сделать – ничего не делать.",
+                "Ваши слёзы – не слабость, они смывают боль.",
+                "Вспомните три хороших события за сегодня.",
+                "Скажите себе: «Я имею право на отдых».",
+                "Не сравнивайте свою жизнь с чужими – у каждой свой путь.",
+                "Если страшно – сделайте шаг, даже крошечный.",
+                "Простите себя за прошлое, вы тогда были другим человеком.",
+                "Налейте чай и смотрите в окно – это тоже медитация.",
+                "Ваше тело заслуживает добрых слов, а не критики.",
+                "Позвоните тому, кто давно не слышал ваш голос.",
+                "Напишите себе письмо из будущего – тёплое и ободряющее.",
+                "Помните: вы не обязана нравиться всем.",
+                "Если злитесь – дайте себе время остыть, как чаю.",
+                "Смотрите на облака – они всегда меняются, как и настроение.",
+                "У вас есть право сказать «нет» без объяснений.",
+                "Каждое утро – это чистый лист, и вы его автор.",
+                "Не ищите виноватых, ищите решения.",
+                "Любите свои морщины – они карта прожитой жизни.",
+                "Иногда молчание – лучшее лекарство.",
+                "Если не знаете, как поступить – прислушайтесь к сердцу.",
+                "Делайте то, что приносит радость, даже 5 минут в день.",
+                "Вы – не то, что о вас говорят, вы – то, что вы чувствуете.",
+                "Жизнь – не гонка, а прогулка.",
+                "Покормите птиц – это дарит ощущение нужности.",
+                "Каждый день находите одну вещь, за которую благодарны.",
+                "Если грустно – включите старую музыку и потанцуйте.",
+                "Не бойтесь ошибаться – ошибки учат нас жить.",
+                "Ваше тело – храм, относитесь к нему с уважением.",
+                "Читайте стихи вслух – они лечат душу.",
+                "Скажите себе: «Я достаточно хороша».",
+                "Если на душе осадок – примите душ и смойте его.",
+                "Мечты не стареют, просто меняют форму.",
+                "Улыбнитесь своему отражению – оно ответит.",
+                "Помните: вы уже пережили все свои самые трудные дни.",
+                "Не торопите время – оно уходит слишком быстро.",
+                "Заведите дневник благодарности – запишите 3 пункта.",
+                "Если кто‑то вас обидел – не держите злобу, она тяжёлая.",
+                "Обнимайте себя за плечи – это дарит тепло.",
+                "Вы имеете право грустить, но не прогоняйте радость.",
+                "Смотрите старые фотографии – там ваши победы.",
+                "Заварите травяной чай и добавьте мёда – забота о себе.",
+                "Доверяйте своей интуиции – она с вами всегда.",
+                "Скажите вслух: «Я справлюсь, я уже справлялась».",
+                "Жизнь даёт вам уроки, а вы дарите ей своё сердце.",
+                "Не ждите идеального момента – начните с того, что есть.",
+                "Ваши близкие всегда в вашем сердце, даже если далеко.",
+                "Если не хочется никуда идти – останьтесь дома и отдохните.",
+                "Мысли – это облака, они проходят, не цепляйтесь за них.",
+                "Позвольте себе быть слабой иногда – это тоже сила.",
+                "Слушайте звуки вокруг – они успокаивают.",
+                "Вы – уникальная, такой больше нет нигде.",
+                "Не бойтесь просить о помощи – это признак мудрости.",
+                "Пересадите цветок – он подарит вам рост и жизнь.",
+                "Каждый день – маленькая жизнь, проживите её достойно.",
+                "Если вам одиноко – представьте, что вы обнимаете себя.",
+                "Скажите себе: «Я сделала всё, что могла».",
+                "Не сравнивайте себя с молодой собой – вы сейчас лучше.",
+                "Позвольте себе мечтать о чём угодно – мечты бесплатны.",
+                "Дышите глубже – кислород освежает мысли.",
+                "Ваша история имеет ценность, расскажите её кому‑то.",
+                "Если страшно ошибиться – вспомните, что ошибки временны.",
+                "Утром улыбнитесь солнцу, даже если его нет.",
+                "Прощайте других – это освобождает ваше сердце.",
+                "Ведите себя с собой как с лучшей подругой.",
+                "Если тревога накрывает – дышите квадратом: вдох‑задержка‑выдох‑задержка.",
+                "У вас есть сила, о которой вы даже не подозреваете.",
+                "Не откладывайте радость на потом – она здесь, сейчас.",
+                "Посмотрите на небо – оно всегда над вами, как поддержка.",
+                "Напишите себе список того, что у вас хорошо получается.",
+                "Если хочется плакать – не сдерживайтесь, слёзы очищают.",
+                "Ваш возраст – это не груз, а багаж опыта.",
+                "Сделайте что‑то доброе для соседа – это согреет.",
+                "Не требуйте от себя слишком многого – вы человек.",
+                "Поверьте: завтра будет лучше, если не ждать быстрых перемен.",
+                "Отдыхайте до того, как устанете – профилактика лучше лечения.",
+                "Если вам плохо – представьте, что вы говорите с другом, и утешьте себя.",
+                "Не бойтесь тишины – она помогает услышать себя.",
+                "Скажите себе: «Я разрешаю себе быть счастливой».",
+                "Вылечите себя добрым словом, как лекарством.",
+                "Смотрите на листья – они падают, чтобы дать место новым.",
+                "Если вы ошиблись – скажите себе: «Бывает» и двигайтесь дальше.",
+                "Окружите себя приятными запахами – они влияют на настроение.",
+                "Помните: вы не обязана быть идеальной для всех.",
+                "Создайте ритуал – например, утреннее чаепитие с видом.",
+                "Если страшно оставаться одной – прислушайтесь к своему дыханию, оно с вами.",
+                "Благодарите своё тело за то, что оно держит вас.",
+                "Перечитайте старые письма – там ваша жизнь.",
+                "Вы достойны уважения, даже если кто‑то говорит иначе.",
+                "Учитесь говорить себе «стоп», когда мысли мчатся.",
+                "Скажите: «Я живу здесь и сейчас, а не в прошлом».",
+                "Ложитесь спать с благодарностью за прожитый день.",
+                "Если вам скучно – это время для нового хобби.",
+                "Ваши чувства – это ваши учителя, слушайте их.",
+                "Всегда есть кто‑то, кто рад вашему звонку.",
+                "Не забывайте пить воду – это забота о теле.",
+                "Отмечайте даже микро-успехи – они имеют значение.",
+                "Если вам грустно – выйдите на улицу и пройдите 100 шагов.",
+                "Не сравнивайте свои достижения с чужими – у каждого свой старт.",
+                "Позвольте себе съесть что‑то вкусное без чувства вины.",
+                "Запишите одну вещь, которую вы хотите сделать, и сделайте.",
+                "Учитесь видеть прекрасное в обычном – закат, дождь, ветер.",
+                "Скажите себе: «Мне не нужно доказывать свою ценность».",
+                "Если вы чувствуете злость – нарисуйте её на бумаге.",
+                "Поговорите с растением – они живые и слышат.",
+                "Не ищите смысл жизни – создавайте его сами каждый день.",
+                "Ваш возраст – это бриллиант, который набрал граней.",
+                "Если кто‑то вас критикует – не принимайте это близко.",
+                "Дайте себе обещание быть добрее к себе сегодня.",
+                "Запахи детства возвращают радость – вспомните их.",
+                "Если трудно уснуть – представьте, что вы качаетесь на волнах.",
+                "У вас есть право не торопиться.",
+                "Поверьте: вы уже сделали больше, чем думаете.",
+                "Не бойтесь перемен – они могут принести новое счастье.",
+                "Ваша душа тоже нуждается в прогулках – выходите чаще.",
+                "Смейтесь над собой – это обезоруживает печаль.",
+                "Если больно – не убегайте, разрешите себе прожить это чувство.",
+                "Помните: вы – не одинокая планета, вы часть вселенной.",
+                "Пишите себе заметки с поддержкой и читайте их.",
+                "Делайте паузы во время работы – отдыхайте глазами.",
+                "Скажите себе: «Я принимаю себя такой, какая есть».",
+                "Попробуйте новое блюдо – новые вкусы будоражат.",
+                "Смотрите на огонь или воду – они медитативны.",
+                "Если вы потеряли что‑то – возможно, оно не было нужным.",
+                "У вас есть право на гнев, но не позволяйте ему управлять.",
+                "Каждое утро благодарите за то, что проснулись.",
+                "Если вам кто‑то не ответил – не ищите причину в себе.",
+                "Ваши мечты – это маяки, даже если вы их не видите.",
+                "Позвольте себе быть ребёнком – поиграйте в настольную игру.",
+                "Не носите старые обиды – они тяжелее камней.",
+                "Если вам страшно – скажите себе: «Я в безопасности сейчас».",
+                "Находите время для уединения – это заряжает.",
+                "Ваше тело говорит с вами – слушайте его сигналы.",
+                "Не судите других – вы не знаете их битвы.",
+                "Иногда лучшее, что можно сделать – просто посидеть в тишине.",
+                "Если вы злитесь на близких – напишите им письмо, но не отправляйте.",
+                "Ваши ошибки – это ступеньки, а не камни на шее.",
+                "Позвольте себе купить цветы – не для праздника, а для души.",
+                "Выходите на балкон и смотрите на облака – они меняются, как и вы.",
+                "Не бойтесь спросить: «Что я чувствую?»",
+                "Скажите себе: «Я могу начать заново в любой момент».",
+                "Если вам грустно – вспомните, кому вы были нужны.",
+                "У вас есть мудрость, которой вы можете поделиться.",
+                "Дышите полной грудью – воздух бесплатен и целителен.",
+                "Вы – не сумма своих проблем, вы – сумма своих решений.",
+                "Если вы запутались – вернитесь к простым вещам.",
+                "Улыбнитесь незнакомцу – это делает мир светлее.",
+                "Не сравнивайте свою старость с чужой молодостью.",
+                "Заведите будильник для тишины – остановитесь на 5 минут.",
+                "Ваши эмоции – не ваши враги, а посланники.",
+                "Если вам одиноко – представьте, что вы в кругу любящих людей.",
+                "Читайте книги – они вас не оставят.",
+                "Скажите себе: «Я достаточно сильна, чтобы попросить помощи».",
+                "Если вы устали – поспите днём, это разрешено.",
+                "Ваша жизнь – это мозаика, каждый день кладёт кусочек.",
+                "Не убегайте от себя – посидите в тишине и послушайте.",
+                "Позвольте себе не знать ответы – это нормально.",
+                "Если вы чувствуете вину – простите себя.",
+                "Начните день с фразы: «Сегодня я буду внимательна к себе».",
+                "Пройдитесь босиком по траве или ковру – заземлитесь.",
+                "Если вы плачете – дайте себе время, не торопитесь.",
+                "Ваша интуиция – лучший советчик.",
+                "Скажите: «Я выбираю покой, а не беспокойство».",
+                "Позвоните старому другу – он будет рад.",
+                "Если вы не знаете, что делать – не делайте ничего.",
+                "Дайте себе разрешение быть неидеальной.",
+                "Заварите чай и наблюдайте за его паром – это медитация.",
+                "Не бойтесь новых начинаний – они дают энергию.",
+                "Ваше прошлое – это не тюрьма, а учебник.",
+                "Если вас одолевают мысли – запишите их и отложите.",
+                "Улыбнитесь кошке или собаке – они почувствуют добро.",
+                "Не держите всё в себе – делитесь с теми, кто услышит.",
+                "Вы заслуживаете спокойной старости, и она возможна.",
+                "Каждый вечер прощайте себя за все – и засыпайте легко.",
+                "Помните: вы – не одиноки, всегда есть кто‑то, кто думает о вас.",
+                "Если вам трудно – представьте, что вы держите за руку себя маленькую.",
+                "Не торопитесь в суждениях – дайте себе время подумать.",
+                "Ваше сердце бьётся – значит, вы живы, и это главное.",
+                "Создайте уют в одной комнате – это ваше убежище.",
+                "Если вам страшно – произнесите своё имя вслух, вы есть.",
+                "Не сравнивайте свою жизнь с соцсетями – там не вся правда.",
+                "Позвольте себе быть спокойной, даже когда вокруг шум.",
+                "Напишите список того, что вы любите в себе – перечитывайте.",
+                "Если вы ошиблись – это опыт, а не приговор.",
+                "Вы имеете право быть счастливой без причины.",
+                "Делайте вдохи медленно – в них сила.",
+                "Если вы гневаетесь – сделайте паузу, сосчитайте до десяти.",
+                "Ваша душа, как сад – ухаживайте за ней каждый день.",
+                "Не бойтесь попросить о помощи – это не слабость.",
+                "Переставьте мебель – это даст новое восприятие.",
+                "Слушайте музыку, которая вас вдохновляла в молодости.",
+                "Если вы потеряли цель – поставьте маленькую, на сегодня.",
+                "Скажите себе: «Я важна, и мои чувства важны».",
+                "Выходите на солнце – витамин D поднимает настроение.",
+                "Вы – не то, что случилось с вами, вы – то, что вы решили.",
+                "Если вам плохо – обнимите подушку, она мягкая.",
+                "Не избегайте грусти – она часть полноты жизни.",
+                "Ваши переживания – это мост к пониманию себя.",
+                "Начните вести список маленьких побед – вы удивитесь.",
+                "Если вы злитесь на мир – нарисуйте этот мир и порвите рисунок.",
+                "Дайте себе слово: сегодня никакой самокритики.",
+                "Ваш смех – это музыка, напевайте её чаще.",
+                "Если вы устали от людей – побывайте наедине с природой.",
+                "Не бойтесь перемен в теле – это нормально.",
+                "Заканчивайте день добрым словом себе – это залог хорошего сна.",
+                "Если вы сомневаетесь – спросите себя: «Что я действительно хочу?»",
+                "У вас есть сила воли, но иногда её можно отпустить.",
+                "Не требуйте от себя быть бодрой 24/7 – разрешите усталость.",
+                "Найдите в интернете старый фильм и посмотрите его с чаем.",
+                "Если вы чувствуете обиду – напишите об этом и сожгите листок.",
+                "Ваше дыхание – это якорь, возвращайтесь к нему.",
+                "Скажите себе: «Я справлюсь, даже если сейчас темно».",
+                "Делайте зарядку для пальцев – это успокаивает.",
+                "Позвоните в службу поддержки, если не с кем поговорить.",
+                "Вы – живая, настоящая, и я вас слышу."
+            ];
 
-            if (currentDay >= 4) {
-                const dailyCharge = TARIFF_FIXED / new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-                
-                for (let i = 0; i < 4; i++) {
-                    const dayNum = currentDay - i;
-                    const dayDate = new Date(now.getFullYear(), now.getMonth(), dayNum);
-                    const dayOfWeekInner = dayDate.getDay();
-                    const dayTimeInfo = timeLogic[dayOfWeekInner];
-                    
-                    transactions.push({
-                        date: `${String(dayNum).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${dayTimeInfo.time}`,
-                        from: '',
-                        card: '',
-                        amount: `-${dailyCharge.toFixed(2)} ГРН`,
-                        description: 'Щоденне списання за пакет послуг',
-                        type: 'debit'
-                    });
+            function getRandomQuote() {
+                let usedQuotes = JSON.parse(localStorage.getItem('usedPsychQuotes') || '[]');
+                let chatHistory = JSON.parse(localStorage.getItem('psychChatHistory') || '[]');
+
+                // Якщо всі репліки використані, скидаємо історію використаних
+                if (usedQuotes.length >= allQuotes.length) {
+                    usedQuotes = [];
                 }
+
+                // Фільтруємо доступні репліки
+                const availableQuotes = allQuotes.filter(q => !usedQuotes.includes(q));
+
+                // Вибираємо випадкову з доступних
+                const randomIndex = Math.floor(Math.random() * availableQuotes.length);
+                const selectedQuote = availableQuotes[randomIndex];
+
+                // Зберігаємо як використану
+                usedQuotes.push(selectedQuote);
+                localStorage.setItem('usedPsychQuotes', JSON.stringify(usedQuotes));
+
+                // Додаємо в історію чату
+                chatHistory.push(selectedQuote);
+                localStorage.setItem('psychChatHistory', JSON.stringify(chatHistory));
+
+                return { selectedQuote, chatHistory };
             }
 
-            const finalTransactions = transactions.slice(0, 6);
-            localStorage.setItem('transactions', JSON.stringify(finalTransactions));
-            return finalTransactions;
-        }
+            function typeMessage(text, element, callback) {
+                let i = 0;
+                let currentText = "";
+                const baseSpeed = 1000 / 6; // 6 символів на секунду
+                const typoChars = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
 
-        function displayTransactions() {
-            const transactions = generateTransactions();
-            const tbody = document.getElementById('transactionBody');
-            tbody.innerHTML = '';
+                function step() {
+                    if (i < text.length) {
+                        let char = text[i];
+                        let delay = baseSpeed + (Math.random() * 50 - 20);
 
-            transactions.forEach(tx => {
-                const row = document.createElement('tr');
-                const amountColor = tx.type === 'credit' ? 'var(--accent-green)' : 'var(--accent-rose)';
+                        if (char === ' ') {
+                            delay += Math.random() * 100 + 50;
+                        } else if (char === ',') {
+                            delay += Math.random() * 200 + 200;
+                        } else if (char === '.' || char === '!' || char === '?') {
+                            delay += Math.random() * 400 + 300;
+                        } else if (char === '—' || char === '-') {
+                            delay += Math.random() * 150 + 100;
+                        }
+
+                        if (Math.random() < 0.05 && /[а-яА-Яa-zA-Z]/.test(char)) {
+                            let typoChar = typoChars.charAt(Math.floor(Math.random() * typoChars.length));
+                            
+                            currentText += typoChar;
+                            element.textContent = currentText;
+                            psychScreen.scrollTop = psychScreen.scrollHeight;
+
+                            setTimeout(() => {
+                                currentText = currentText.slice(0, -1);
+                                element.textContent = currentText;
+                                
+                                setTimeout(() => {
+                                    currentText += char;
+                                    element.textContent = currentText;
+                                    psychScreen.scrollTop = psychScreen.scrollHeight;
+                                    i++;
+                                    setTimeout(step, delay);
+                                }, 100 + Math.random() * 150);
+                            }, 200 + Math.random() * 300);
+                        } else {
+                            currentText += char;
+                            element.textContent = currentText;
+                            psychScreen.scrollTop = psychScreen.scrollHeight;
+                            i++;
+                            setTimeout(step, delay);
+                        }
+                    } else {
+                        if (callback) callback();
+                    }
+                }
+                step();
+            }
+
+            function checkPsychologist() {
+                const hour = new Date().getHours();
+                let chance = 0.4;
                 
-                row.innerHTML = `
-                    <td>
-                        <div style="font-weight:600;">${tx.date}</div>
-                        ${tx.from ? `<div style="font-size:0.9rem; color:var(--text-light); margin-top:0.25rem;">${tx.from}</div>` : ''}
-                        ${tx.card ? `<div style="font-size:0.9rem; color:var(--text-light);">${tx.card}</div>` : ''}
-                    </td>
-                    <td>${tx.description}</td>
-                    <td style="color:${amountColor}; font-weight:700; font-size:1.1rem;">${tx.amount}</td>
-                `;
-                tbody.appendChild(row);
+                if (hour >= 21) {
+                    chance = 0.8;
+                } else if (hour >= 8 && hour < 11) {
+                    chance = 1.0;
+                }
+
+                if (Math.random() < chance) {
+                    startPsychologistChat();
+                    return true;
+                }
+                return false;
+            }
+
+            function startPsychologistChat() {
+                psychScreen.style.display = 'flex';
+                mainContainer.style.display = 'none';
+                mainContainer.classList.remove('visible');
+                
+                // Отримуємо нову репліку та історію чату
+                const { selectedQuote, chatHistory } = getRandomQuote();
+
+                // Очищаємо контейнер чату
+                chatContainer.innerHTML = '';
+
+                // Відображаємо попередні повідомлення (крім останнього, яке будемо друкувати)
+                for (let i = 0; i < chatHistory.length - 1; i++) {
+                    const bubble = document.createElement('div');
+                    bubble.className = 'chat-bubble';
+                    bubble.textContent = chatHistory[i];
+                    chatContainer.appendChild(bubble);
+                }
+
+                // Створюємо бульбашку для нового повідомлення
+                const newBubble = document.createElement('div');
+                newBubble.className = 'chat-bubble';
+                chatContainer.appendChild(newBubble);
+
+                // Скролимо вниз
+                psychScreen.scrollTop = psychScreen.scrollHeight;
+
+                setTimeout(() => {
+                    typeMessage(selectedQuote, newBubble, () => {
+                        psychButtons.style.display = 'flex';
+                        psychScreen.scrollTop = psychScreen.scrollHeight;
+                    });
+                }, 1000);
+            }
+
+            btnSkip.addEventListener('click', () => {
+                psychScreen.style.display = 'none';
+                mainContainer.style.display = 'flex';
+                mainContainer.classList.add('visible');
+                loginSection.style.display = 'flex';
             });
-        }
 
-        function displayMedicines() {
-            const schedule = document.getElementById('medicineSchedule');
-            if (!schedule) return;
-            
-            schedule.innerHTML = '';
-            medicines.forEach(med => {
-                const item = document.createElement('div');
-                item.className = 'medicine-item';
-                item.innerHTML = `
-                    <div class="medicine-time">${med.time}</div>
-                    <div class="medicine-info">
-                        <div class="medicine-name">${med.name}</div>
-                        <div class="medicine-dose">${med.dose}</div>
-                    </div>
-                    <div class="medicine-check ${med.taken ? '' : 'pending'}">
-                        ${med.taken ? '✓' : '○'}
-                    </div>
-                `;
-                schedule.appendChild(item);
+            function switchTab(tabId) {
+                navTabs.forEach(tab => {
+                    tab.classList.remove('active');
+                    if (tab.dataset.tab === tabId) tab.classList.add('active');
+                });
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === tabId) content.classList.add('active');
+                });
+                if (tabId === 'billing') updateBalances();
+            }
+
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
             });
-        }
 
-        function updateBalanceDisplay() {
-            const calc = calculateBalance();
-            document.getElementById('balanceValue').textContent = calc.balance + ' грн';
-            document.getElementById('dailyCharge').textContent = calc.dailyCharge + ' грн';
-            document.getElementById('daysLeft').textContent = calc.daysLeft;
+            loginBtn.addEventListener('click', () => {
+                loginSection.style.display = 'none';
+                dashboard.classList.add('active');
+                updateBalances();
+            });
 
-            const now = new Date();
-            const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-            const months = ['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
-            document.getElementById('nextPaymentDate').textContent =
-                '1 ' + months[nextMonth.getMonth()] + ' ' + nextMonth.getFullYear();
-
-            const days = ['Неділя','Понеділок','Вівторок','Середа','Четвер','П\'ятниця','Субота'];
-            document.getElementById('currentDate').innerHTML =
-                days[now.getDay()] + '<br>' +
-                now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
-        }
-
-        function startLoading() {
-            const duration = 2500;
+            const loadDuration = Math.floor(Math.random() * 2500) + 2200;
             const startTime = Date.now();
 
             function updateProgress() {
                 const elapsed = Date.now() - startTime;
-                const progress = Math.min((elapsed / duration) * 100, 100);
+                const progress = Math.min((elapsed / loadDuration) * 100, 100);
                 progressBar.style.width = progress + '%';
-
                 if (progress < 100) {
                     requestAnimationFrame(updateProgress);
                 } else {
                     setTimeout(() => {
                         loadingScreen.classList.add('hidden');
-                        mainContainer.classList.add('visible');
-                        
-                        // Time-based logic
-                        if (shouldShowPsychologist()) {
-                            setTimeout(() => {
-                                psychScreen1.classList.add('active');
-                            }, 500);
+                        if (!checkPsychologist()) {
+                            mainContainer.classList.add('visible');
                         }
-                    }, 300);
+                    }, 250);
                 }
             }
-
             requestAnimationFrame(updateProgress);
-        }
-
-        function switchTab(tabId) {
-            navTabs.forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.dataset.tab === tabId) tab.classList.add('active');
-            });
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-                if (content.id === tabId) content.classList.add('active');
-            });
-            
-            window.scrollTo({ top: 0, behavior: 'instant' });
-            setTimeout(updateScrollButtons, 100);
-        }
-
-        function doLogout() {
-            dashboard.classList.remove('active');
-            loginSection.style.display = '';
-            headerUser.style.display = 'none';
-            logoutBtn.style.display = 'none';
-        }
-
-        // Медленная плавная прокрутка через requestAnimationFrame
-        function smoothScrollSlow() {
-            const target = document.documentElement.scrollHeight - window.innerHeight;
-            const start = window.scrollY;
-            const distance = target - start;
-            const duration = 5000; // 5 секунд
-            let startTime = null;
-            
-            function step(timestamp) {
-                if (!startTime) startTime = timestamp;
-                const progress = timestamp - startTime;
-                const percent = Math.min(progress / duration, 1);
-                // easeInOutQuad для плавности
-                const ease = percent < 0.5 
-                    ? 2 * percent * percent 
-                    : 1 - Math.pow(-2 * percent + 2, 2) / 2;
-                window.scrollTo(0, start + distance * ease);
-                
-                if (progress < duration) {
-                    requestAnimationFrame(step);
-                } else {
-                    setTimeout(updateScrollButtons, 100);
-                }
-            }
-            requestAnimationFrame(step);
-        }
-
-        function updateScrollButtons() {
-            const scrollHeight = document.documentElement.scrollHeight;
-            const clientHeight = window.innerHeight;
-            const scrollTop = window.scrollY;
-            const maxScroll = scrollHeight - clientHeight;
-            
-            // Скрываем если страница помещается
-            if (scrollHeight <= clientHeight + 50) {
-                scrollBtn.classList.remove('visible');
-                nextBtn.classList.remove('visible');
-                return;
-            }
-            
-            if (scrollTop < maxScroll - 30) {
-                // Еще можно скроллить — показываем кнопку прокрутки
-                scrollBtn.classList.add('visible');
-                nextBtn.classList.remove('visible');
-                nextBtn.style.display = 'none';
-            } else {
-                // Достигнут конец — показываем кнопку перехода
-                scrollBtn.classList.remove('visible');
-                
-                const currentTabId = document.querySelector('.nav-tab.active').dataset.tab;
-                const tabs = Array.from(navTabs).map(t => t.dataset.tab);
-                const currentIndex = tabs.indexOf(currentTabId);
-                
-                if (currentIndex < tabs.length - 1) {
-                    const nextTabId = tabs[currentIndex + 1];
-                    const nextTabElement = document.querySelector(`[data-tab="${nextTabId}"]`);
-                    const nextTabName = nextTabElement.textContent.trim();
-                    nextBtn.textContent = `➡️ НАСТУПНИЙ РОЗДІЛ: ${nextTabName}`;
-                    nextBtn.style.display = 'block';
-                    nextBtn.classList.add('visible');
-                } else {
-                    nextBtn.classList.remove('visible');
-                    nextBtn.style.display = 'none';
-                }
-            }
-        }
-
-        // Медитация - фразы идут по своему таймеру, независимо от аудио
-        function startMeditation() {
-            psychScreen2.classList.remove('active');
-            meditationScreen.classList.add('active');
-            
-            const randomAudio = audioFiles[Math.floor(Math.random() * audioFiles.length)];
-            const audio = new Audio(randomAudio);
-            audio.volume = 0.7;
-            audio.play().catch(e => console.log('Audio error:', e));
-            
-            let phraseIndex = 0;
-            const phraseElement = document.getElementById('meditationPhrase');
-            
-            function showNextPhrase() {
-                if (phraseIndex >= meditationPhrases.length) {
-                    endMeditation();
-                    return;
-                }
-                
-                phraseElement.textContent = meditationPhrases[phraseIndex];
-                phraseElement.classList.remove('fading');
-                // Показываем фразу (fade-in 3 секунды)
-                phraseElement.classList.add('visible');
-                
-                // Держим фразу 15 секунд, затем fade-out 3 секунды
-                setTimeout(() => {
-                    phraseElement.classList.remove('visible');
-                    phraseElement.classList.add('fading');
-                    
-                    // После fade-out ждём 15 секунд перед следующей фразой
-                    setTimeout(() => {
-                        phraseElement.classList.remove('fading');
-                        phraseIndex++;
-                        showNextPhrase();
-                    }, 3000 + 15000); // 3s fade-out + 15s пауза
-                }, 15000); // 15 секунд показа
-            }
-            
-            function endMeditation() {
-                audio.pause();
-                phraseElement.classList.remove('visible', 'fading');
-                phraseElement.style.display = 'none';
-                document.getElementById('meditationEnd').classList.add('active');
-                
-                setTimeout(() => {
-                    meditationScreen.classList.remove('active');
-                    loginSection.style.display = 'none';
-                    dashboard.classList.add('active');
-                    headerUser.style.display = 'flex';
-                    logoutBtn.style.display = '';
-                    updateBalanceDisplay();
-                    displayTransactions();
-                    displayMedicines();
-                    setTimeout(updateScrollButtons, 100);
-                }, 4000);
-            }
-            
-            showNextPhrase();
-        }
-
-        // Event Listeners
-        navTabs.forEach(tab => {
-            tab.addEventListener('click', () => switchTab(tab.dataset.tab));
-        });
-
-        loginBtn.addEventListener('click', () => {
-            loginSection.style.display = 'none';
-            dashboard.classList.add('active');
-            headerUser.style.display = 'flex';
-            logoutBtn.style.display = '';
-            updateBalanceDisplay();
-            displayTransactions();
-            displayMedicines();
-            setTimeout(updateScrollButtons, 100);
-        });
-
-        document.getElementById('psychYesBtn').addEventListener('click', () => {
-            psychScreen1.classList.remove('active');
-            psychScreen2.classList.add('active');
-        });
-
-        document.getElementById('psychNoBtn').addEventListener('click', () => {
-            psychScreen1.classList.remove('active');
-            loginSection.style.display = 'none';
-            dashboard.classList.add('active');
-            headerUser.style.display = 'flex';
-            logoutBtn.style.display = '';
-            updateBalanceDisplay();
-            displayTransactions();
-            displayMedicines();
-            setTimeout(updateScrollButtons, 100);
-        });
-
-        document.getElementById('startMeditationBtn').addEventListener('click', startMeditation);
-
-        document.getElementById('backToCabinetBtn').addEventListener('click', () => {
-            psychScreen2.classList.remove('active');
-            loginSection.style.display = 'none';
-            dashboard.classList.add('active');
-            headerUser.style.display = 'flex';
-            logoutBtn.style.display = '';
-            updateBalanceDisplay();
-            displayTransactions();
-            displayMedicines();
-            setTimeout(updateScrollButtons, 100);
-        });
-
-        scrollBtn.addEventListener('click', smoothScrollSlow);
-        
-        nextBtn.addEventListener('click', () => {
-            const currentTabId = document.querySelector('.nav-tab.active').dataset.tab;
-            const tabs = Array.from(navTabs).map(t => t.dataset.tab);
-            const currentIndex = tabs.indexOf(currentTabId);
-            
-            if (currentIndex < tabs.length - 1) {
-                switchTab(tabs[currentIndex + 1]);
-            }
-        });
-
-        window.addEventListener('scroll', updateScrollButtons);
-        window.addEventListener('resize', updateScrollButtons);
-
-        document.addEventListener('DOMContentLoaded', startLoading);
+        })();
     </script>
 </body>
 </html>
